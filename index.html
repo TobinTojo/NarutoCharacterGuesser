@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naruto Character Guessing Game</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <h1>Naruto Character Guessing Game</h1>
+    <input type="text" id="searchBar" placeholder="Guess the player..." disabled>
+    <ul id="autocomplete"></ul>
+    <ul id="results"></ul>
+    
+    <!-- Section for Dotted Boxes and Numbered Lines -->
+    <div id="guessSection">
+        <h2>Guesses</h2>
+        <div id="dottedBoxes">
+            <div class="dotted-box" id="box1">1</div>
+            <div class="dotted-box" id="box2">2</div>
+            <div class="dotted-box" id="box3">3</div>
+            <div class="dotted-box" id="box4">4</div>
+            <div class="dotted-box" id="box5">5</div>
+            <div class="dotted-box" id="box6">6</div>
+            <div class="dotted-box" id="box7">7</div>
+            <div class="dotted-box" id="box8">8</div>
+        </div>
+    </div>
+    
+    <!-- Character Image Container -->
+    <div id="characterImageContainer" style="text-align: center; margin-top: 20px;">
+        <!-- The image will be dynamically inserted here -->
+    </div>
+
+    <p id="message"></p>
+    <button id="playAgain" style="display: none;">Play Again</button>
+    <button id="statsButton">Stats</button>
+    <div id="stats" style="display: none;">
+        <h2>Game Stats</h2>
+        <p>Games Played: <span id="gamesPlayed">0</span></p>
+        <p>Current Streak: <span id="currentStreak">0</span></p>
+        <p>Longest Streak: <span id="longestStreak">0</span></p>
+        <p>Win Percentage: <span id="winPercentage">0%</span></p>
+        <h3>Guess Distribution</h3>
+        <ul id="guessDistribution"></ul>
+        <button id="closeStats">Close</button>
+    </div>
+ <!-- Popup HTML structure -->
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span id="closePopup" class="close">&times;</span>
+        <div id="popupCharacterName" class="popup-header">
+            <h2>Character Name</h2>
+        </div>
+        <div id="popupImageContainer" class="image-container">
+            <!-- Image will be dynamically inserted here -->
+        </div>
+        <div id="popupMessage">
+            <!-- Message will be dynamically inserted here -->
+        </div>
+        <button id="playAgainPopup">Play Again</button>
+    </div>
+</div>
+    <script src="index.js"></script>
+</body>
+</html>

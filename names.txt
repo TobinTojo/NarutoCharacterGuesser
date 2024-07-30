@@ -1,0 +1,56 @@
+Naruto Uzumaki | Genin | Hidden Leaf Village | 5'11" | 17 years old | Uzumaki | Wind, Earth, Water, Fire, Lightning | Alive | Male
+Sasuke Uchiha | Genin | Hidden Leaf Village | 5'11" | 17 years old | Uchiha | Fire, Lightning | Alive | Male
+Sakura Haruno | Chunin | Hidden Leaf Village | 5'5" | 17 years old | Haruno | Earth, Water | Alive | Female
+Kakashi Hatake | Jonin | Hidden Leaf Village | 5'11" | 31 years old | Hatake | Lightning, Water, Earth, Fire | Alive | Male
+Gaara | Kage | Hidden Sand Village | 5'5" | 17 years old | No Clan | Wind, Earth | Alive | Male
+Hinata Hyūga | Chunin | Hidden Leaf Village | 5'4" | 17 years old | Hyuga | Fire, Lightning | Alive | Female
+Itachi Uchiha | Akatsuki | Hidden Leaf Village | 5'8" | 21 years old | Uchiha | Fire, Water, Wind | Deceased | Male
+Shikamaru Nara | Chunin | Hidden Leaf Village | 5'10" | 17 years old | Nara | Shadow | Alive | Male
+Rock Lee | Chunin | Hidden Leaf Village | 5'8" | 17 years old | No Clan | None | Alive | Male
+Neji Hyūga | Jonin | Hidden Leaf Village | 5'8" | 17 years old | Hyuga | Fire, Water | Deceased | Male
+Tsunade | Kage | Hidden Leaf Village | 5'4" | 55 years old | Senju | Earth, Water | Alive | Female
+Jiraiya | Sannin | Hidden Leaf Village | 6'3" | 54 years old | No Clan | Fire, Earth | Deceased | Male
+Kiba Inuzuka | Chunin | Hidden Leaf Village | 5'8" | 17 years old | Inuzuka | Earth | Alive | Male
+Shino Aburame | Chunin | Hidden Leaf Village | 5'9" | 17 years old | Aburame | Earth | Alive | Male
+Chōji Akimichi | Chunin | Hidden Leaf Village | 5'10" | 17 years old | Akimichi | Earth | Alive | Male
+Ino Yamanaka | Chunin | Hidden Leaf Village | 5'4" | 17 years old | Yamanaka | Earth | Alive | Female
+Asuma Sarutobi | Jonin | Hidden Leaf Village | 6'0" | 31 years old | Sarutobi | Wind, Fire | Deceased | Male
+Kurenai Yūhi | Jonin | Hidden Leaf Village | 5'6" | 31 years old | No Clan | Fire | Alive | Female
+Might Guy | Jonin | Hidden Leaf Village | 6'0" | 31 years old | No Clan | None | Alive | Male
+Minato Namikaze | Kage | Hidden Leaf Village | 5'10" | 24 years old | Namikaze | Wind, Lightning | Deceased | Male
+Kushina Uzumaki | Jonin | Hidden Leaf Village | 5'6" | 24 years old | Uzumaki | Wind, Water | Deceased | Female
+Obito Uchiha | Akatsuki | Hidden Leaf Village | 5'8" | 31 years old | Uchiha | Fire, Earth | Deceased | Male
+Madara Uchiha | Leader | Hidden Leaf Village | 5'10" | 90 years old | Uchiha | Fire, Wind | Deceased | Male
+Hashirama Senju | Kage | Hidden Leaf Village | 6'1" | 90 years old | Senju | Earth, Water | Deceased | Male
+Tobirama Senju | Kage | Hidden Leaf Village | 6'0" | 90 years old | Senju | Water | Deceased | Male
+Hiruzen Sarutobi | Kage | Hidden Leaf Village | 5'10" | 69 years old | Sarutobi | Fire, Earth | Deceased | Male
+Danzō Shimura | Leader | Hidden Leaf Village | 5'10" | 72 years old | Shimura | Wind, Fire | Deceased | Male
+Kisame Hoshigaki | Akatsuki | Hidden Mist Village | 6'4" | 32 years old | No Clan | Water | Deceased | Male
+Deidara | Akatsuki | Hidden Stone Village | 5'6" | 19 years old | No Clan | Earth | Deceased | Male
+Sasori | Akatsuki | Hidden Sand Village | 5'5" | 35 years old | No Clan | None | Deceased | Male
+Hidan | Akatsuki | Hidden Hot Water Village | 5'8" | 22 years old | No Clan | None | Deceased | Male
+Kakuzu | Akatsuki | Hidden Waterfall Village | 6'2" | 91 years old | No Clan | Earth, Water, Fire, Wind, Lightning | Deceased | Male
+Zetsu | Akatsuki | Unknown | 5'8" | Unknown | No Clan | Earth | Deceased | Male
+Konan | Akatsuki | Hidden Rain Village | 5'6" | 35 years old | No Clan | Paper | Deceased | Female
+Nagato | Leader | Hidden Rain Village | 5'9" | 35 years old | Uzumaki | Wind, Water, Fire, Earth, Lightning | Deceased | Male
+Yahiko | Leader | Hidden Rain Village | 5'9" | 35 years old | No Clan | Water | Deceased | Male
+Suigetsu Hōzuki | Chunin | Hidden Mist Village | 5'9" | 17 years old | Hozuki | Water | Alive | Male
+Jūgo | Chunin | Unknown | 6'0" | 17 years old | No Clan | Earth | Alive | Male
+Killer B | Jonin | Hidden Cloud Village | 6'2" | 36 years old | No Clan | Lightning | Alive | Male
+A (Fourth Raikage) | Kage | Hidden Cloud Village | 6'4" | 47 years old | No Clan | Lightning | Alive | Male
+Darui | Jonin | Hidden Cloud Village | 5'10" | 26 years old | No Clan | Lightning, Water | Alive | Male
+Omoi | Chunin | Hidden Cloud Village | 5'10" | 17 years old | No Clan | Lightning | Alive | Male
+Karui | Chunin | Hidden Cloud Village | 5'6" | 17 years old | No Clan | Lightning | Alive | Female
+Mabui | Jonin | Hidden Cloud Village | 5'7" | 26 years old | No Clan | Lightning | Alive | Female
+Samui | Jonin | Hidden Cloud Village | 5'7" | 26 years old | No Clan | Lightning | Alive | Female
+C | Jonin | Hidden Cloud Village | 5'8" | 40 years old | No Clan | Lightning | Alive | Male
+Fū | Chunin | Hidden Waterfall Village | 5'2" | 16 years old | No Clan | Water | Alive | Female
+Yugito Nii | Jinchuriki | Hidden Cloud Village | 5'7" | 27 years old | No Clan | Fire, Lightning | Deceased | Female
+Han | Jinchuriki | Hidden Stone Village | 6'0" | 39 years old | No Clan | Earth | Deceased | Male
+Rōshi | Jinchuriki | Hidden Stone Village | 6'1" | 45 years old | No Clan | Fire, Earth | Deceased | Male
+Zabuza Momochi | Jonin | Hidden Mist Village | 6'0" | 26 years old | No Clan | Water | Deceased | Male
+Haku | Chunin | Hidden Mist Village | 5'6" | 15 years old | No Clan | Water, Ice | Deceased | Male
+Karin | Chunin | Hidden Grass Village | 5'6" | 17 years old | Uzumaki | Earth, Water | Alive | Female
+Temari | Jonin | Hidden Sand Village | 5'7" | 17 years old | No Clan | Wind | Alive | Female
+Kankurō | Jonin | Hidden Sand Village | 5'10" | 17 years old | No Clan | None | Alive | Male
+Orochimaru | Sannin | Hidden Leaf Village | 5'10" | 54 years old | No Clan | Earth, Wind | Alive | Male

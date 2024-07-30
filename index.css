@@ -1,0 +1,271 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    background-color: #2f3136; /* Discord Dark Background */
+    color: #dcddde; /* Light gray text */
+}
+
+h1 {
+    color: #ffffff; /* White text for headers */
+}
+
+#searchBar {
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #4f545c; /* Darker border */
+    border-radius: 5px;
+    background-color: #40444b; /* Dark input background */
+    color: #dcddde; /* Light text color */
+}
+
+#autocomplete {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 300px;
+    border: 1px solid #4f545c; /* Darker border */
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #40444b; /* Dark background */
+    border-radius: 5px;
+}
+
+#autocomplete li {
+    padding: 10px;
+    cursor: pointer;
+    color: #dcddde; /* Light text color */
+}
+
+#autocomplete li:hover {
+    background-color: #36393f; /* Slightly lighter on hover */
+}
+
+#results {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+#results li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #4f545c; /* Darker border */
+    background-color: #40444b; /* Dark background */
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#results li div {
+    width: 100px;
+    text-align: center;
+}
+
+.correct {
+    background-color: #3ba55c; /* Discord green */
+    color: #ffffff; /* White text */
+}
+
+.similar {
+    background-color: #faa61a; /* Discord yellow */
+    color: #000000; /* Black text */
+}
+
+#message {
+    font-size: 1.2em;
+    margin-top: 20px;
+    color: #dcddde; /* Light text color */
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    margin-top: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #5865f2; /* Discord blue */
+    color: #ffffff; /* White text color */
+}
+
+button:hover {
+    background-color: #4752c4; /* Slightly darker blue on hover */
+}
+
+#stats {
+    background-color: #40444b; /* Dark background */
+    border: 2px solid #4f545c; /* Darker border */
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow */
+}
+
+#stats h2 {
+    color: #ffffff; /* White text for headers */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#stats p {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+#stats span {
+    font-weight: bold;
+}
+
+#guessDistribution {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#guessDistribution li {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    border-bottom: 1px solid #4f545c; /* Darker border */
+}
+
+#closeStats, #statsButton {
+    margin-top: 20px;
+    background-color: #5865f2; /* Discord blue */
+}
+
+#closeStats:hover, #statsButton:hover {
+    background-color: #4752c4; /* Slightly darker blue on hover */
+}
+
+/* Additional styling for the new section */
+#guessSection {
+    margin-top: 30px;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+#dottedBoxes {
+    display: grid;
+    grid-template-columns: repeat(4, 100px); /* 4 columns, each 100px wide */
+    grid-gap: 10px; /* Space between the boxes */
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.dotted-box {
+    width: 100px;
+    height: 100px;
+    border: 2px dotted #4f545c; /* Darker border */
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    color: #dcddde; /* Light text color */
+    background-color: #40444b; /* Dark background */
+}
+
+.guessed {
+    border: 2px solid #4f545c; /* Darker border */
+    background-color: #36393f; /* Slightly lighter background */
+    color: #dcddde; /* Light text color */
+    font-size: 1em; /* Slightly smaller font size for better fit */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.correct-guess {
+    border: 2px solid #4f545c; /* Darker border */
+    background-color: #3ba55c; /* Discord green */
+    color: #ffffff; /* White text color */
+}
+
+/* Popup container - background overlay */
+.popup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: #2f3136; /* Dark background */
+}
+
+/* Popup content */
+.popup-content {
+    background-color: #5e626c; /* Popup background */
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 70%; /* Adjust width if necessary */
+    text-align: center;
+    position: relative; /* For close button positioning */
+    color: #ffffff; /* Text color */
+}
+
+/* Popup header */
+.popup-header {
+    font-size: 30px;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
+.popup-header h2 {
+    margin: 0;
+}
+
+/* The close button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Image container */
+.image-container img {
+    max-width: 100%;
+    width: 500px; /* Set width to 500 pixels */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Button styles */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 10px;
+    color: #ffffff; /* Text color */
+    background-color: #5865f2; /* Discord blue */
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4752c4; /* Slightly darker blue on hover */
+}
+
+/* Number of tries styling */
+.number-of-tries {
+    font-size: 18px; /* Increase font size */
+    color: #faa61a;  /* Change text color to yellow */
+    font-weight: bold; /* Make text bold */
+}
