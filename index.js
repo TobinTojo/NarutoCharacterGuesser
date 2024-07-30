@@ -275,6 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (savedStats) {
             Object.assign(stats, savedStats);
         }
+        updateRankSection(); // Update rank section when stats are loaded
     }
 
     function saveStats() {
@@ -293,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stats.currentStreak = 0;
         }
         stats.guessDistribution[Math.min(guesses, 7)]++;
+        stats.rank = calculateRank(); // Update rank based on current stats
         saveStats();
     }
 
@@ -308,7 +310,44 @@ document.addEventListener('DOMContentLoaded', () => {
             li.textContent = `Guesses ${index + 1}: ${count}`;
             guessDistributionUl.appendChild(li);
         });
+
+        updateRankSection(); // Update rank section when stats are displayed
     }
+
+    function calculateRank() {
+        if (stats.wins >= 220) return 'Jonin 1';
+        if (stats.wins >= 180) return 'Jonin 2';
+        if (stats.wins >= 140) return 'Jonin 3';
+        if (stats.wins >= 110) return 'Chunin 1';
+        if (stats.wins >= 80) return 'Chunin 2';
+        if (stats.wins >= 50) return 'Chunin 3';
+        if (stats.wins >= 30) return 'Genin 1';
+        if (stats.wins >= 10) return 'Genin 2';
+        return 'Genin 3'; // Default rank
+    }
+
+    // Update rank section with the current rank
+    function updateRankSection() {
+        const rankImage = document.getElementById('rankImage');
+        const rankHeader = document.getElementById('rankHeader');
+        
+        let imageUrl = '';
+        let rankName = stats.rank || 'Genin 3'; // Default rank if not defined
+
+        if (rankName.startsWith('Genin')) {
+            imageUrl = 'images/genin.png'; // Update with your image path
+        } else if (rankName.startsWith('Chunin')) {
+            imageUrl = 'images/chunin.png'; // Update with your image path
+        } else if (rankName.startsWith('Jonin')) {
+            imageUrl = 'images/jonin.png'; // Update with your image path
+        } else {
+            imageUrl = 'images/default.png'; // Fallback image
+        }
+
+        if (rankImage) rankImage.src = imageUrl;
+        if (rankHeader) rankHeader.textContent = `Rank: ${rankName}`;
+    }
+
 
     // Help button functionality
     helpButton.addEventListener('click', () => {

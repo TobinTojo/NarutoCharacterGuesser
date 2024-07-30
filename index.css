@@ -410,3 +410,13 @@ button:hover {
 #label-box {
     background-color: #44619b !important;
 }
+
+#rankSection {
+    margin: 20px 0;
+    text-align: center;
+}
+
+#rankHeader {
+    font-size: 20px;
+    color: #ffffff; /* White text color for the rank */
+}
