@@ -45,12 +45,24 @@ Mabui | Jonin | Hidden Cloud Village | 5'7" | 26 years old | No Clan | Lightning
 Samui | Jonin | Hidden Cloud Village | 5'7" | 26 years old | No Clan | Lightning | Alive | Female
 C | Jonin | Hidden Cloud Village | 5'8" | 40 years old | No Clan | Lightning | Alive | Male
 Fū | Chunin | Hidden Waterfall Village | 5'2" | 16 years old | No Clan | Water | Alive | Female
-Yugito Nii | Jinchuriki | Hidden Cloud Village | 5'7" | 27 years old | No Clan | Fire, Lightning | Deceased | Female
-Han | Jinchuriki | Hidden Stone Village | 6'0" | 39 years old | No Clan | Earth | Deceased | Male
-Rōshi | Jinchuriki | Hidden Stone Village | 6'1" | 45 years old | No Clan | Fire, Earth | Deceased | Male
+Yugito Nii | Jonin | Hidden Cloud Village | 5'7" | 27 years old | No Clan | Fire, Lightning | Deceased | Female
+Han | Jonin | Hidden Stone Village | 6'0" | 39 years old | No Clan | Earth | Deceased | Male
+Rōshi | Jonin | Hidden Stone Village | 6'1" | 45 years old | No Clan | Fire, Earth | Deceased | Male
 Zabuza Momochi | Jonin | Hidden Mist Village | 6'0" | 26 years old | No Clan | Water | Deceased | Male
 Haku | Chunin | Hidden Mist Village | 5'6" | 15 years old | No Clan | Water, Ice | Deceased | Male
 Karin | Chunin | Hidden Grass Village | 5'6" | 17 years old | Uzumaki | Earth, Water | Alive | Female
 Temari | Jonin | Hidden Sand Village | 5'7" | 17 years old | No Clan | Wind | Alive | Female
 Kankurō | Jonin | Hidden Sand Village | 5'10" | 17 years old | No Clan | None | Alive | Male
 Orochimaru | Sannin | Hidden Leaf Village | 5'10" | 54 years old | No Clan | Earth, Wind | Alive | Male
+Utakata | Jonin | Hidden Mist Village | 5'10" | 30 years old | No Clan | Water, Wind | Alive | Male
+A (Third Raikage) | Kage | Hidden Cloud Village | 6'5" | 50 years old | No Clan | Lightning | Deceased | Male
+Konohamaru Sarutobi | Genin | Hidden Leaf Village | 5'4" | 12 years old | Sarutobi | Fire, Wind | Alive | Male
+Dosu Kinuta | Genin | Hidden Sound Village | 5'9" | 15 years old | Kinuta | Sound | Deceased | Male
+Genma Shiranui | Jonin | Hidden Leaf Village | 5'8" | 28 years old | No Clan | Wind, Earth | Alive | Male
+Aoba Yamashiro | Jonin | Hidden Leaf Village | 5'9" | 27 years old | No Clan | Wind, Earth | Alive | Male
+Kotetsu Hagane | Chunin | Hidden Leaf Village | 5'6" | 23 years old | No Clan | Earth | Alive | Male
+Izumo Kamizuki | Chunin | Hidden Leaf Village | 5'8" | 23 years old | No Clan | Earth | Alive | Male
+Ao | Jonin | Hidden Mist Village | 6'0" | 45 years old | No Clan | Water, Wind | Alive | Male
+Torune Aburame | Jonin | Hidden Leaf Village | 5'9" | 30 years old | Yamanaka | Earth, Wind | Alive | Male
+Gari | Jonin | Hidden Stone Village | 6'0" | 35 years old | No Clan | Earth | Deceased | Male
+Kie | Jonin | Hidden Stone Village | 6'1" | 40 years old | No Clan | Earth | Deceased | Male
