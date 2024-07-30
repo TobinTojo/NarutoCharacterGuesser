@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // DOM element references
     const searchBar = document.getElementById('searchBar');
+    const guessButton = document.getElementById('guessButton'); // Added guessButton
     const autocomplete = document.getElementById('autocomplete');
     const results = document.getElementById('results');
     const message = document.getElementById('message');
@@ -20,7 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupCharacterName = document.getElementById('popupCharacterName');
     const playAgainPopup = document.getElementById('playAgainPopup');
     const closePopup = document.getElementById('closePopup');
-
+    const helpButton = document.getElementById('helpButton');
+    const helpDiv = document.getElementById('help');
+    const closeHelpButton = document.getElementById('closeHelp');
+    
     let characters = [];
     let targetCharacter = null;
     let guessedCharacters = new Set();
@@ -72,63 +76,70 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    function handleGuess() {
+        if (gameWon || guesses >= 8) {
+            return; // Do nothing if game is won or 8 guesses are already made
+        }
+
+        const searchTerm = searchBar.value.toLowerCase();
+        const filteredCharacters = characters.filter(character => character.name.toLowerCase() === searchTerm);
+
+        if (filteredCharacters.length > 0) {
+            const character = filteredCharacters[0];
+            guessedCharacters.add(character.name);
+            guesses++;
+
+            // Update the dotted box with the guessed character
+            const box = document.getElementById(`box${guesses}`);
+            if (box) {
+                box.textContent = character.name;
+                box.classList.add('guessed');
+
+                // Check if the guessed character is correct
+                if (character.name === targetCharacter.name) {
+                    box.classList.add('correct-guess');
+                    message.textContent = 'You guessed the right character!';
+                    gameWon = true;
+                    searchBar.disabled = true;
+                    playAgainButton.style.display = 'block';
+                    updateStats(true);
+                    fetchCharacterImage(character.name); // Fetch and display image
+                    showPopup(); // Show the popup
+                } else if (guesses >= 8) {
+                    message.textContent = `Game Over! The character was ${targetCharacter.name}.`;
+                    searchBar.disabled = true;
+                    playAgainButton.style.display = 'block';
+                    updateStats(false);
+                    fetchCharacterImage(targetCharacter.name); // Fetch and display image
+                    showPopup(); // Show the popup
+                }
+            }
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div>${character.name}</div>
+                <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
+                <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
+                <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrow(character.height, targetCharacter.height)}</div>
+                <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
+                <div class="${getClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
+                <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
+                <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
+                <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
+            `;
+            results.appendChild(li);
+
+            searchBar.value = '';
+            showAllNames(); // Show all names after a guess
+        }
+    }
+
+    // Add event listener for the guess button
+    guessButton.addEventListener('click', handleGuess);
+
     searchBar.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            if (gameWon || guesses >= 8) {
-                return; // Do nothing if game is won or 8 guesses are already made
-            }
-
-            const searchTerm = searchBar.value.toLowerCase();
-            const filteredCharacters = characters.filter(character => character.name.toLowerCase() === searchTerm);
-
-            if (filteredCharacters.length > 0) {
-                const character = filteredCharacters[0];
-                guessedCharacters.add(character.name);
-                guesses++;
-
-                // Update the dotted box with the guessed character
-                const box = document.getElementById(`box${guesses}`);
-                if (box) {
-                    box.textContent = character.name;
-                    box.classList.add('guessed');
-
-                    // Check if the guessed character is correct
-                    if (character.name === targetCharacter.name) {
-                        box.classList.add('correct-guess');
-                        message.textContent = 'You guessed the right character!';
-                        gameWon = true;
-                        searchBar.disabled = true;
-                        playAgainButton.style.display = 'block';
-                        updateStats(true);
-                        fetchCharacterImage(character.name); // Fetch and display image
-                        showPopup(); // Show the popup
-                    } else if (guesses >= 8) {
-                        message.textContent = `Game Over! The character was ${targetCharacter.name}.`;
-                        searchBar.disabled = true;
-                        playAgainButton.style.display = 'block';
-                        updateStats(false);
-                        fetchCharacterImage(targetCharacter.name); // Fetch and display image
-                        showPopup(); // Show the popup
-                    }
-                }
-
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <div>${character.name}</div>
-                    <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
-                    <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
-                    <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrow(character.height, targetCharacter.height)}</div>
-                    <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
-                    <div class="${getClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
-                    <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
-                    <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
-                    <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
-                `;
-                results.appendChild(li);
-
-                searchBar.value = '';
-                showAllNames(); // Show all names after a guess
-            }
+            handleGuess(); // Handle guess when Enter key is pressed
         }
     });
 
@@ -162,13 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showPopup() {
-        const popup = document.getElementById('popup');
-        const popupImageContainer = document.getElementById('popupImageContainer');
-        const popupMessage = document.getElementById('popupMessage');
-        const popupCharacterName = document.getElementById('popupCharacterName');
-        const playAgainPopup = document.getElementById('playAgainPopup');
-        const closePopup = document.getElementById('closePopup');
-
         popupCharacterName.innerHTML = `<h2>${targetCharacter.name}</h2>`;
 
         popupImageContainer.innerHTML = ''; // Clear previous image
@@ -305,4 +309,13 @@ document.addEventListener('DOMContentLoaded', () => {
             guessDistributionUl.appendChild(li);
         });
     }
+
+    // Help button functionality
+    helpButton.addEventListener('click', () => {
+        helpDiv.style.display = 'block';
+    });
+
+    closeHelpButton.addEventListener('click', () => {
+        helpDiv.style.display = 'none';
+    });
 });

@@ -12,14 +12,36 @@ h1 {
     color: #ffffff; /* White text for headers */
 }
 
+#searchContainer {
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+    gap: 10px; /* Space between search bar and button */
+    margin-bottom: 20px; /* Space below the container */
+}
+
 #searchBar {
     width: 300px;
     padding: 10px;
-    margin-bottom: 20px;
     border: 2px solid #4f545c; /* Darker border */
     border-radius: 5px;
     background-color: #40444b; /* Dark input background */
     color: #dcddde; /* Light text color */
+}
+
+#guessButton {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #5865f2; /* Discord blue */
+    color: #ffffff; /* White text color */
+    /* Align button slightly lower */
+    margin-top: 5px;
+}
+
+#guessButton:hover {
+    background-color: #4752c4; /* Slightly darker blue on hover */
 }
 
 #autocomplete {
@@ -137,12 +159,36 @@ button:hover {
     border-bottom: 1px solid #4f545c; /* Darker border */
 }
 
-#closeStats, #statsButton {
+/* Existing CSS rules here */
+
+#buttonContainer {
+    display: flex;        /* Use flexbox layout */
+    gap: 10px;            /* Space between the buttons */
+    margin-top: 20px;     /* Margin from the top */
+}
+
+#statsButton, #helpButton {
+    display: inline-block;  /* Ensure buttons are inline-block */
+    padding: 10px 20px;     /* Padding for buttons */
+    font-size: 16px;        /* Font size for buttons */
+    cursor: pointer;        /* Cursor style for buttons */
+    border: none;           /* Remove default border */
+    border-radius: 5px;    /* Rounded corners for buttons */
+    background-color: #5865f2; /* Discord blue */
+    color: #ffffff;         /* White text color */
+}
+
+#statsButton:hover, #helpButton:hover {
+    background-color: #4752c4; /* Slightly darker blue on hover */
+}
+
+
+#closeStats, #statsButton, #helpButton {
     margin-top: 20px;
     background-color: #5865f2; /* Discord blue */
 }
 
-#closeStats:hover, #statsButton:hover {
+#closeStats:hover, #statsButton:hover, #helpButton:hover {
     background-color: #4752c4; /* Slightly darker blue on hover */
 }
 
@@ -268,4 +314,99 @@ button:hover {
     font-size: 18px; /* Increase font size */
     color: #faa61a;  /* Change text color to yellow */
     font-weight: bold; /* Make text bold */
+}
+
+/* Additional CSS for alignment */
+#searchContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#searchBar {
+    width: 300px;
+    padding: 10px;
+    border: 2px solid #4f545c; /* Darker border */
+    border-radius: 5px;
+    background-color: #40444b; /* Dark input background */
+    color: #dcddde; /* Light text color */
+}
+
+#guessButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #5865f2; /* Discord blue */
+    color: #ffffff; /* White text color */
+    /* Align button slightly lower */
+    margin-top: 5px;
+}
+
+#guessButton:hover {
+    background-color: #4752c4; /* Slightly darker blue on hover */
+}
+
+
+/* Help modal styles */
+#help {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 2; /* Sit on top of everything */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+}
+
+.help-content {
+    background-color: #40444b; /* Dark background for content */
+    color: #dcddde; /* Light text color */
+    border: 1px solid #4f545c; /* Darker border */
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    margin: 10% auto;
+    text-align: center;
+}
+
+.help-content h2 {
+    color: #ffffff; /* White text for headers */
+}
+
+.help-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.help-content ul li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+#closeHelp {
+    background-color: #5865f2; /* Discord blue */
+    color: #ffffff; /* White text color */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#closeHelp:hover {
+    background-color: #4752c4; /* Slightly darker blue on hover */
+}
+
+.label {
+    font-weight: 600;
+    background-color:  #44619b;
+}
+
+#label-box {
+    background-color: #44619b !important;
 }
