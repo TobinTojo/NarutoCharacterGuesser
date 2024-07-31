@@ -440,3 +440,99 @@ button:hover {
     padding-bottom: 2px;
     border-radius: 2px;
 }
+
+@media screen and (max-width: 1024px) {
+    #results {
+        list-style-type: none;
+        padding: 0;
+        width: 100%;
+        max-width: 800px;
+        margin-top: 20px;
+        font-size: 10px;
+    }
+
+    #results li {
+        display: flex;
+        justify-content: center;
+        width: 320px;
+        padding: 10px;
+        border-bottom: 1px solid #4f545c;
+        background-color: #40444b;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .label {
+        font-weight: 600;
+        background-color: #44619b;
+        font-size: 10px;
+    }
+
+    #searchBar {
+        width: 200px;
+        padding: 10px;
+        border: 2px solid rgb(79, 84, 92);
+        border-radius: 5px;
+        background-color: rgb(64, 68, 75);
+        color: rgb(220, 221, 222);
+    }
+
+    #autocomplete {
+        list-style-type: none;
+        padding: 0px;
+        margin: 0px;
+        width: 200px;
+        border: 1px solid rgb(79, 84, 92);
+        max-height: 150px;
+        overflow-y: auto;
+        background-color: rgb(64, 68, 75);
+        border-radius: 5px;
+    }
+
+    h1 {
+        color: rgb(255, 255, 255);
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
+        display: flex;
+        width: 300px;
+        font-size: 18px;
+    }
+
+    .header-title {
+        font-size: 18px;
+    }
+
+    #dottedBoxes {
+        grid-template-columns: repeat(4, 1fr); /* 2 columns, each taking up equal space */
+        grid-gap: 5px; /* Reduced space between the boxes */
+    }
+
+    .dotted-box {
+        width: 80px; /* Smaller box width */
+        height: 80px; /* Smaller box height */
+        font-size: 1.2em; /* Smaller font size for better fit */
+    }
+
+    .guessed {
+        font-size: 0.9em; /* Smaller font size for better fit */
+    }
+
+    .popup-content {
+        width: 70%; /* Increased width for smaller screens */
+        max-width: none; /* Remove the max-width constraint */
+        margin: 10% auto; /* Increase top margin to ensure it's centered properly */
+    }
+
+    .popup-header {
+        font-size: 24px; /* Reduce font size for smaller screens */
+    }
+
+    .close {
+        font-size: 30px; /* Reduce size of close button */
+    }
+
+
+}
