@@ -272,7 +272,7 @@ button:hover {
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 70%; /* Adjust width if necessary */
+    width: 40%; /* Adjust width if necessary */
     text-align: center;
     position: relative; /* For close button positioning */
     color: #ffffff; /* Text color */
@@ -324,6 +324,10 @@ button {
 
 button:hover {
     background-color: #4752c4; /* Slightly darker blue on hover */
+}
+
+#playAgain {
+    margin-bottom: 30px;
 }
 
 /* Number of tries styling */
@@ -457,6 +461,36 @@ button:hover {
     border-radius: 2px;
 }
 
+
+.navbar {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    display: flex;
+}
+
+.navbar button {
+    margin-left: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5865f2; /* Discord blue */
+    color: white;
+    cursor: pointer;
+}
+.navbar button:hover {
+    background-color: #0056b3;
+}
+
+li {
+    list-style:none;
+}
+
+header {
+    margin-top: 50px;
+}
+
+
 @media screen and (max-width: 1024px) {
     #results {
         list-style-type: none;
@@ -550,5 +584,20 @@ button:hover {
         font-size: 30px; /* Reduce size of close button */
     }
 
+    #statsButton, #helpButton, #aboutButton {
+        display: inline-block;  /* Ensure buttons are inline-block */
+        padding: 5px 10px;     /* Padding for buttons */
+        font-size: 12px;        /* Font size for buttons */
+        cursor: pointer;        /* Cursor style for buttons */
+        border: none;           /* Remove default border */
+        border-radius: 5px;    /* Rounded corners for buttons */
+        background-color: #5865f2; /* Discord blue */
+        color: #ffffff;         /* White text color */
+    }
 
+    header {
+        margin-top: 30px;
+    }
+    
+    
 }

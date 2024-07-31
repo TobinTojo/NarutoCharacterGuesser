@@ -7,7 +7,14 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h1>Naruto Character Guessing Game</h1>
+    <nav class="navbar">
+        <button id="statsButton">Stats</button>
+        <button id="helpButton">Help</button>
+        <button id="aboutButton">About</button>
+    </nav>
+    <header>
+        <h1>Naruto Character Guessing Game</h1>
+    </header>
     <div id="searchContainer">
         <input type="text" id="searchBar" placeholder="Guess the player..." disabled>
         <button id="guessButton">Guess</button>
@@ -16,20 +23,20 @@
     <ul id="autocomplete"></ul>
     <ul id="results">
         <li id="label-box">
-    <div class="label">Name</div>
-    <div class="label">Rank</div>
-    <div class="label">Village</div>
-    <div class="label">Height</div>
-    <div class="label" >Age</div>
-    <div class="label">Clan</div>
-    <div class="label">Chakra Natures</div>
-    <div class="label">Status</div>
-    <div class="label">Gender</div>
+            <div class="label">Name</div>
+            <div class="label">Rank</div>
+            <div class="label">Village</div>
+            <div class="label">Height</div>
+            <div class="label">Age</div>
+            <div class="label">Clan</div>
+            <div class="label">Chakra Natures</div>
+            <div class="label">Status</div>
+            <div class="label">Gender</div>
         </li>
     </ul>
     <!-- Section for Dotted Boxes and Numbered Lines -->
     <div id="guessSection">
-        <h2 class = "header-title">Guesses</h2>
+        <h2 class="header-title">Guesses</h2>
         <div id="dottedBoxes">
             <div class="dotted-box" id="box1">1</div>
             <div class="dotted-box" id="box2">2</div>
@@ -49,36 +56,29 @@
 
     <p id="message"></p>
     <button id="playAgain" style="display: none;">Play Again</button>
-    <div id="buttonContainer">
-        <button id="statsButton">Stats</button>
-        <button id="helpButton">Help</button>
-        <button id="aboutButton">About</button>
-    </div>
-    
     
     <!-- Stats content -->
-<div id="stats">
-    <div class="stats-content">
-        <h2>Game Stats</h2>
-        <p>Games Played: <span id="gamesPlayed">0</span></p>
-        <p>Current Streak: <span id="currentStreak">0</span></p>
-        <p>Longest Streak: <span id="longestStreak">0</span></p>
-        <p>Win Percentage: <span id="winPercentage">0%</span></p>
-        <!-- Rank Section -->
-        <div id="rankSection">
-            <img id="rankImage" src="" alt="Rank Image" style="width: 80px; display: block; margin: 0 auto;">
-            <h3 id="rankHeader">Rank: </h3>
+    <div id="stats" class="popup">
+        <div class="popup-content">
+            <h2>Game Stats</h2>
+            <p>Games Played: <span id="gamesPlayed">0</span></p>
+            <p>Current Streak: <span id="currentStreak">0</span></p>
+            <p>Longest Streak: <span id="longestStreak">0</span></p>
+            <p>Win Percentage: <span id="winPercentage">0%</span></p>
+            <!-- Rank Section -->
+            <div id="rankSection">
+                <img id="rankImage" src="" alt="Rank Image" style="width: 80px; display: block; margin: 0 auto;">
+                <h3 id="rankHeader">Rank: </h3>
+            </div>
+            <h3>Guess Distribution</h3>
+            <ul id="guessDistribution"></ul>
+            <button id="closeStats" class="close-button">Close</button>
         </div>
-        <h3>Guess Distribution</h3>
-        <ul id="guessDistribution"></ul>
-        <button id="closeStats">Close</button>
     </div>
-</div>
-
 
     <!-- Help content -->
-    <div id="help" style="display: none;">
-        <div class="help-content">
+    <div id="help" class="popup">
+        <div class="popup-content">
             <h2>How to Play</h2>
             <p>Try to guess the Naruto character in 8 guesses.</p>
             <p><strong id="green-box">Green</strong> is an exact match.</p>
@@ -87,13 +87,13 @@
                 <li>Chakra Nature indicates the character has at least 1 of those chakra natures.</li>
                 <li>Height or age is off by at most 2.</li>
             </ul>
-            <button id="closeHelp">Close</button>
+            <button id="closeHelp" class="close-button">Close</button>
         </div>
     </div>
 
     <!-- About Popup -->
-    <div id="about-popup" style="display: none;">
-        <div class="about-content">
+    <div id="about-popup" class="popup">
+        <div class="popup-content">
             <h2>About Naruto Character Guesser</h2>
             <p>Inspired by the NBA guessing game Poeltl, Tobin wanted to create a similar experience for Naruto fans to enjoy and test how much they really know about the characters in Naruto Shippuden. Tobin also aimed to create a rank system in the game, drawing inspiration from the shinobi ranks in the anime.</p>
             <button id="closeAbout" class="close-button">Close</button>
@@ -119,4 +119,3 @@
     <script src="index.js"></script>
 </body>
 </html>
-
