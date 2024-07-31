@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const message = document.getElementById('message');
     const playAgainButton = document.getElementById('playAgain');
     const statsButton = document.getElementById('statsButton');
+    const aboutButton = document.getElementById('aboutButton');
     const statsDiv = document.getElementById('stats');
     const closeStatsButton = document.getElementById('closeStats');
     const gamesPlayedSpan = document.getElementById('gamesPlayed');
@@ -23,7 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const closePopup = document.getElementById('closePopup');
     const helpButton = document.getElementById('helpButton');
     const helpDiv = document.getElementById('help');
+    const aboutDiv = document.getElementById('about-popup');
     const closeHelpButton = document.getElementById('closeHelp');
+    const closeAboutButton = document.getElementById('closeAbout');
     
     let characters = [];
     let targetCharacter = null;
@@ -151,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statsDiv.style.display = 'block';
         displayStats();
     });
-
+    
     closeStatsButton.addEventListener('click', () => {
         statsDiv.style.display = 'none';
     });
@@ -356,5 +359,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeHelpButton.addEventListener('click', () => {
         helpDiv.style.display = 'none';
+    });
+
+    aboutButton.addEventListener('click', () => {
+        aboutDiv.style.display = 'block';
+    });
+
+    closeAboutButton.addEventListener('click', () => {
+        aboutDiv.style.display = 'none';
     });
 });

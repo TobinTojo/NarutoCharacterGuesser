@@ -120,30 +120,47 @@ button:hover {
     background-color: #4752c4; /* Slightly darker blue on hover */
 }
 
+/* CSS for Stats Modal */
 #stats {
-    background-color: #40444b; /* Dark background */
-    border: 2px solid #4f545c; /* Darker border */
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 2; /* Sit on top of everything */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+}
+
+.stats-content {
+    background-color: #40444b; /* Dark background for content */
+    color: #dcddde; /* Light text color */
+    border: 1px solid #4f545c; /* Darker border */
     border-radius: 10px;
     padding: 20px;
-    margin-top: 20px;
-    width: 300px;
+    width: 80%;
+    max-width: 600px;
+    margin: 10% auto;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow */
 }
 
-#stats h2 {
+.stats-content h2 {
     color: #ffffff; /* White text for headers */
-    font-size: 24px;
-    margin-bottom: 20px;
 }
 
-#stats p {
-    margin: 10px 0;
-    font-size: 18px;
+#closeStats {
+    background-color: #5865f2; /* Discord blue */
+    color: #ffffff; /* White text color */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 20px;
 }
 
-#stats span {
-    font-weight: bold;
+#closeStats:hover {
+    background-color: #4752c4; /* Slightly darker blue on hover */
 }
 
 #guessDistribution {
@@ -167,7 +184,7 @@ button:hover {
     margin-top: 20px;     /* Margin from the top */
 }
 
-#statsButton, #helpButton {
+#statsButton, #helpButton, #aboutButton {
     display: inline-block;  /* Ensure buttons are inline-block */
     padding: 10px 20px;     /* Padding for buttons */
     font-size: 16px;        /* Font size for buttons */
@@ -178,17 +195,17 @@ button:hover {
     color: #ffffff;         /* White text color */
 }
 
-#statsButton:hover, #helpButton:hover {
+#statsButton:hover, #helpButton:hover, #aboutButton:hover {
     background-color: #4752c4; /* Slightly darker blue on hover */
 }
 
 
-#closeStats, #statsButton, #helpButton {
+#closeStats, #statsButton, #helpButton, #aboutButton {
     margin-top: 20px;
     background-color: #5865f2; /* Discord blue */
 }
 
-#closeStats:hover, #statsButton:hover, #helpButton:hover {
+#closeStats:hover, #statsButton:hover, #helpButton:hover, #aboutButton:hover {
     background-color: #4752c4; /* Slightly darker blue on hover */
 }
 
@@ -350,7 +367,7 @@ button:hover {
 
 
 /* Help modal styles */
-#help {
+#help, #about-popup {
     display: none; /* Hidden by default */
     position: fixed;
     z-index: 2; /* Sit on top of everything */
@@ -362,7 +379,7 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
 }
 
-.help-content {
+.help-content, .about-content {
     background-color: #40444b; /* Dark background for content */
     color: #dcddde; /* Light text color */
     border: 1px solid #4f545c; /* Darker border */
@@ -374,7 +391,7 @@ button:hover {
     text-align: center;
 }
 
-.help-content h2 {
+.help-content h2, .about-content h2 {
     color: #ffffff; /* White text for headers */
 }
 
@@ -388,7 +405,7 @@ button:hover {
     line-height: 1.6;
 }
 
-#closeHelp {
+#closeHelp, #closeAbout {
     background-color: #5865f2; /* Discord blue */
     color: #ffffff; /* White text color */
     border: none;
@@ -398,10 +415,9 @@ button:hover {
     margin-top: 20px;
 }
 
-#closeHelp:hover {
+#closeHelp:hover, #closeAbout:hover {
     background-color: #4752c4; /* Slightly darker blue on hover */
 }
-
 .label {
     font-weight: 600;
     background-color:  #44619b;

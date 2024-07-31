@@ -52,24 +52,29 @@
     <div id="buttonContainer">
         <button id="statsButton">Stats</button>
         <button id="helpButton">Help</button>
+        <button id="aboutButton">About</button>
     </div>
     
     
-    <div id="stats" style="display: none;">
+    <!-- Stats content -->
+<div id="stats">
+    <div class="stats-content">
         <h2>Game Stats</h2>
         <p>Games Played: <span id="gamesPlayed">0</span></p>
         <p>Current Streak: <span id="currentStreak">0</span></p>
         <p>Longest Streak: <span id="longestStreak">0</span></p>
         <p>Win Percentage: <span id="winPercentage">0%</span></p>
-            <!-- Rank Section -->
-    <div id="rankSection">
-        <img id="rankImage" src="" alt="Rank Image" style="width: 80px; display: block; margin: 0 auto;">
-        <h3 id="rankHeader">Rank: </h3>
+        <!-- Rank Section -->
+        <div id="rankSection">
+            <img id="rankImage" src="" alt="Rank Image" style="width: 80px; display: block; margin: 0 auto;">
+            <h3 id="rankHeader">Rank: </h3>
+        </div>
+        <h3>Guess Distribution</h3>
+        <ul id="guessDistribution"></ul>
+        <button id="closeStats">Close</button>
     </div>
-    <h3>Guess Distribution</h3>
-    <ul id="guessDistribution"></ul>
-    <button id="closeStats">Close</button>
-    </div>
+</div>
+
 
     <!-- Help content -->
     <div id="help" style="display: none;">
@@ -85,7 +90,16 @@
             <button id="closeHelp">Close</button>
         </div>
     </div>
-    
+
+    <!-- About Popup -->
+    <div id="about-popup" style="display: none;">
+        <div class="about-content">
+            <h2>About Naruto Character Guesser</h2>
+            <p>Inspired by the NBA guessing game Poeltl, Tobin wanted to create a similar experience for Naruto fans to enjoy and test how much they really know about the characters in Naruto Shippuden. Tobin also aimed to create a rank system in the game, drawing inspiration from the shinobi ranks in the anime.</p>
+            <button id="closeAbout" class="close-button">Close</button>
+        </div>
+    </div>
+
     <!-- Popup HTML structure -->
     <div id="popup" class="popup">
         <div class="popup-content">
