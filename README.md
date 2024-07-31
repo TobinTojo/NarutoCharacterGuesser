@@ -1,19 +1,10 @@
-# Getting Started
-Install the dependencies and run the project
-```
-npm install
-npm start
-```
+# Naruto Character Guesser
+Inspired by the NBA guessing game Poeltl, I wanted to create a similar experience for Naruto fans to enjoy and test how much they really know about the characters in Naruto Shippuden. 
 
-Head over to https://vitejs.dev/ to learn more about configuring vite
-## About Scrimba
+# How To Use
+Simply clone this repo, and run npm install in the created directory.
 
-At Scrimba our goal is to create the best possible coding school at the cost of a gym membership! 💜
-If we succeed with this, it will give anyone who wants to become a software developer a realistic shot at succeeding, regardless of where they live and the size of their wallets 🎉
-The Frontend Developer Career Path aims to teach you everything you need to become a Junior Developer, or you could take a deep-dive with one of our advanced courses 🚀
+Once that's done, run either npm run OR npm start
 
-- [Our courses](https://scrimba.com/allcourses)
-- [The Frontend Career Path](https://scrimba.com/learn/frontend)
-- [Become a Scrimba Pro member](https://scrimba.com/pricing)
-
-Happy Coding!
+# Preview
+The project was hosted using Netlify: https://narutocharacterguesser.netlify.app/
