@@ -67,6 +67,6 @@ Torune Aburame | Jonin | Hidden Leaf Village | 5'9" | 30 years old | Yamanaka | 
 Gari | Jonin | Hidden Stone Village | 6'0" | 35 years old | No Clan | Earth | Deceased | Male
 Kie | Jonin | Hidden Stone Village | 6'1" | 40 years old | No Clan | Earth | Deceased | Male
 Tenten | Chunin | Hidden Leaf Village | 5'4" | 18 years old | No Clan | Earth, Wind | Alive | Female
-Shizune | Jonin | Hidden Leaf Village | 5'5" | 31 years old | No Clan | Earth, Wind | Alive | Female
-Ōnoki | Kage | Hidden Stone Village | 4'2"| 100 years old | No Clan | Earth, Wind, Fire | Alive | Male
+Shizune | Jonin | Hidden Leaf Village | 5'5" | 31 years old | No Clan | Earth, Water | Alive | Female
+Ōnoki | Kage | Hidden Stone Village | 4'2" | 100 years old | No Clan | Earth, Wind, Fire | Alive | Male
 Mei Terumī | Kage | Hidden Mist Village | 5'7" | 31 years old | No Clan | Water, Fire, Earth, Lightning | Alive | Female
