@@ -87,6 +87,7 @@ h1 {
 #results li div {
     width: 100px;
     text-align: center;
+    overflow-wrap: anywhere;
 }
 
 .correct {

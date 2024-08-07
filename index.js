@@ -45,17 +45,35 @@ document.addEventListener('DOMContentLoaded', () => {
     loadStats();
 
     fetch('names.txt')
-        .then(response => response.text())
-        .then(data => {
-            characters = data.split('\n').map(line => {
-                const [name, rank, village, height, age, clan, abilities, status, gender] = line.split(' | ');
-                return { name, rank, village, height, age, clan, abilities, status, gender };
-            });
-            targetCharacter = characters[Math.floor(Math.random() * characters.length)];
-            searchBar.disabled = false;
-            showAllNames(); // Show all names initially
-        })
-        .catch(error => console.error('Error fetching names:', error));
+    .then(response => response.text())
+    .then(data => {
+        // Split the data by new lines and map each line to an object with name and empty properties
+        characters = data.split('\n').map(line => {
+            const name = line.trim(); // Remove any extra whitespace
+            return { 
+                name,
+                rank: '',         // Placeholder for rank
+                village: '',      // Placeholder for village
+                height: '',       // Placeholder for height
+                age: '',          // Placeholder for age
+                clan: '',         // Placeholder for clan
+                abilities: '',    // Placeholder for abilities
+                status: '',       // Placeholder for status
+                gender: ''        // Placeholder for gender
+            };
+        }).filter(character => character.name); // Filter out any empty names
+
+        // Pick a random character from the list
+        targetCharacter = characters[Math.floor(Math.random() * characters.length)];
+
+        // Update the target character and perform necessary operations
+        setTargetCharacter();
+        console.log(targetCharacter.name);
+        searchBar.disabled = false;
+        showAllNames(); // Show all names initially
+    })
+    .catch(error => console.error('Error fetching names:', error));
+
 
     searchBar.addEventListener('input', () => {
         const searchTerm = searchBar.value.toLowerCase();
@@ -79,7 +97,136 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function handleGuess() {
+    function cmToFeetAndInches(cm) {
+        const totalInches = cm / 2.54;
+        const feet = Math.floor(totalInches / 12);
+        const inches = Math.round(totalInches % 12);
+        return `${feet}'${inches}"`;
+    }
+    
+    function extractLastTwoCharactersOfAge(age) {
+        if (age) {
+            // Return the last two characters of the age string
+            return age.slice(-2).trim();
+        }
+        return 'Unknown'; // Return 'Unknown' if age is not available
+    }
+    
+    
+    async function setTargetCharacter() {
+            const url = `https://narutodb.xyz/api/character/search?name=${encodeURIComponent(targetCharacter.name)}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+            // Extract Part I and Part II ranks
+            const partIiRank = data.rank?.ninjaRank?.['Part II'];
+            const partIRank = data.rank?.ninjaRank?.['Part I'];
+
+            // Use Part II rank if available, otherwise fall back to Part I rank
+            const displayRank = partIiRank || partIRank || 'Unknown';
+
+            // Convert heights to feet and inches
+            const partIiHeightCm = data.personal?.height?.['Part II'];
+            const partIHeightCm = data.personal?.height?.['Part I'];
+            const partIiHeight = partIiHeightCm ? 
+                cmToFeetAndInches(parseFloat(partIiHeightCm)) : 
+                (partIHeightCm ? cmToFeetAndInches(parseFloat(partIHeightCm)) : 'Unknown');
+
+            // Extract and clean age information
+            const partIiAge = extractLastTwoCharactersOfAge(data.personal?.age?.['Part II']) || 'Unknown';
+
+            // Clean chakra natures
+            const cleanedNatureTypes = cleanChakraNature(data.natureType || ['None']);
+
+            // Get clan or default to 'Unknown'
+            const clan = data.personal?.clan || 'None';
+
+            targetCharacter.rank = displayRank;
+            targetCharacter.age = partIiAge;
+            
+            const villageMap = {
+                'Konohagakure': 'Hidden Leaf Village',
+                'Sunagakure': 'Hidden Sand Village',
+                'Kirigakure': 'Hidden Mist Village',
+                'Kumogakure': 'Hidden Cloud Village',
+                'Iwagakure': 'Hidden Stone Village',
+                'Amegakure': 'Hidden Rain Village',
+                'Takigakure': 'Hidden Waterfall Village',
+                'Otogakure': 'Hidden Sound Village',
+                'Hoshigakure': 'Hidden Star Village',
+                'Kusagakure': 'Hidden Grass Village',
+                'Yugakure': 'Hidden Hot Water Village'
+            };
+            
+            // Get the Japanese (romaji) village name(s)
+            let japaneseVillageName = data.personal?.affiliation;
+            
+            // Handle cases where affiliation is an array or a single string
+            if (Array.isArray(japaneseVillageName)) {
+                // If it's an array, use the first element or default to 'Unknown'
+                japaneseVillageName = japaneseVillageName[0] || 'Unknown';
+            } else {
+                // If it's a string, use it directly or default to 'Unknown'
+                japaneseVillageName = japaneseVillageName || 'Unknown';
+            }
+            
+            // Convert Japanese (romaji) name to English name
+            const englishVillageName = villageMap[japaneseVillageName] || 'Unknown';
+            
+            // Capitalize the first letter of the English name
+            const capitalizedVillageName = englishVillageName === 'Unknown'
+                ? 'Unknown'
+                : englishVillageName.charAt(0).toUpperCase() + englishVillageName.slice(1);
+            
+            // Assign to targetCharacter.village
+            targetCharacter.village = capitalizedVillageName;
+            
+            console.log(targetCharacter.village); // Outputs the capitalized village name or 'Unknown'
+            
+
+            targetCharacter.height = partIiHeight;
+            targetCharacter.abilities = cleanedNatureTypes;
+            targetCharacter.clan = clan;
+            targetCharacter.status = data.personal?.status || 'Alive';
+            targetCharacter.gender = data.personal?.sex || 'Unknown';
+            console.log(targetCharacter);
+    }
+    function cleanChakraNature(nature) {
+        // Define the valid words and their capitalized versions
+        const validNatures = {
+            'earth': 'Earth',
+            'fire': 'Fire',
+            'water': 'Water',
+            'wind': 'Wind',
+            'lightning': 'Lightning'
+        };
+        
+        // Process the input array
+        const processedNatures = nature
+            .map(type => 
+                type
+                    .replace(/\s*release\s*/gi, '')             // Remove the word "release" (case-insensitive)
+                    .replace(/\s*\(.*?\)/g, '')                 // Remove any text within parentheses (including the parentheses)
+                    .replace(/[\[\]{}]/g, '')                   // Remove square and curly brackets
+                    .trim()                                      // Trim any leading or trailing whitespace
+                    .toLowerCase()                              // Convert to lowercase for consistent comparison
+            )
+            .map(type => validNatures[type] || '')         // Map to the proper capitalization or empty if not valid
+            .filter(type => type);                        // Filter out empty strings
+        
+        // Check if the array is empty and set it to ['None'] if it is
+        return processedNatures.length > 0 ? processedNatures : ['None'];
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+
+    async function handleGuess() {
         if (gameWon || guesses >= 8) {
             return; // Do nothing if game is won or 8 guesses are already made
         }
@@ -117,6 +264,81 @@ document.addEventListener('DOMContentLoaded', () => {
                     showPopup(); // Show the popup
                 }
             }
+            const url = `https://narutodb.xyz/api/character/search?name=${encodeURIComponent(character.name)}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+            // Extract Part I and Part II ranks
+            const partIiRank = data.rank?.ninjaRank?.['Part II'];
+            const partIRank = data.rank?.ninjaRank?.['Part I'];
+
+            // Use Part II rank if available, otherwise fall back to Part I rank
+            const displayRank = partIiRank || partIRank || 'Unknown';
+
+            // Convert heights to feet and inches
+            const partIiHeightCm = data.personal?.height?.['Part II'];
+            const partIHeightCm = data.personal?.height?.['Part I'];
+            const partIiHeight = partIiHeightCm ? 
+                cmToFeetAndInches(parseFloat(partIiHeightCm)) : 
+                (partIHeightCm ? cmToFeetAndInches(parseFloat(partIHeightCm)) : 'Unknown');
+
+            // Extract and clean age information
+            const partIiAge = extractLastTwoCharactersOfAge(data.personal?.age?.['Part II']) || 'Unknown';
+
+            // Clean chakra natures
+            const cleanedNatureTypes = cleanChakraNature(data.natureType || ['None']);
+
+            // Get clan or default to 'Unknown'
+            const clan = data.personal?.clan || 'None';
+            
+            const villageMap = {
+                'Konohagakure': 'Hidden Leaf Village',
+                'Sunagakure': 'Hidden Sand Village',
+                'Kirigakure': 'Hidden Mist Village',
+                'Kumogakure': 'Hidden Cloud Village',
+                'Iwagakure': 'Hidden Stone Village',
+                'Amegakure': 'Hidden Rain Village',
+                'Takigakure': 'Hidden Waterfall Village',
+                'Otogakure': 'Hidden Sound Village',
+                'Hoshigakure': 'Hidden Star Village',
+                'Kusagakure': 'Hidden Grass Village',
+                'Yugakure': 'Hidden Hot Water Village'
+            };
+            
+            // Get the Japanese (romaji) village name(s)
+            let japaneseVillageName = data.personal?.affiliation;
+            
+            // Handle cases where affiliation is an array or a single string
+            if (Array.isArray(japaneseVillageName)) {
+                // If it's an array, use the first element or default to 'Unknown'
+                japaneseVillageName = japaneseVillageName[0] || 'Unknown';
+            } else {
+                // If it's a string, use it directly or default to 'Unknown'
+                japaneseVillageName = japaneseVillageName || 'Unknown';
+            }
+            
+            // Convert Japanese (romaji) name to English name
+            const englishVillageName = villageMap[japaneseVillageName] || 'Unknown';
+            
+            // Capitalize the first letter of the English name
+            const capitalizedVillageName = englishVillageName === 'Unknown'
+                ? 'Unknown'
+                : englishVillageName.charAt(0).toUpperCase() + englishVillageName.slice(1);
+            
+            // Assign to targetCharacter.village
+            character.village = capitalizedVillageName;
+            
+            console.log(character.village); // Outputs the capitalized village name or 'Unknown'
+            
+
+            character.rank = displayRank;
+            character.age = partIiAge;
+            character.height = partIiHeight;
+            character.abilities = cleanedNatureTypes;
+            character.clan = clan;
+            character.status = data.personal?.status || 'Alive';
+            character.gender = data.personal?.sex || 'Unknown';
+            console.log(character);
 
             const li = document.createElement('li');
             li.innerHTML = `
@@ -236,8 +458,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getChakraClass(abilities, targetAbilities) {
-        const abilitiesSet = new Set(abilities.split(', ').map(a => a.trim()));
-        const targetAbilitiesSet = new Set(targetAbilities.split(', ').map(a => a.trim()));
+        const abilitiesSet = new Set(abilities);
+        const targetAbilitiesSet = new Set(targetAbilities);
 
         if (abilitiesSet.size === targetAbilitiesSet.size && [...abilitiesSet].every(ability => targetAbilitiesSet.has(ability))) {
             return 'correct'; // Full match
@@ -249,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        return ''; // No match
+        return 'no'; // No match
     }
 
     function compareHeights(height1, height2) {
