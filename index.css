@@ -546,6 +546,11 @@ header {
     object-fit: cover;
 }
 
+#charactersPopup {
+    display: none; /* Hide by default */
+    /* Add other styling as needed */
+}
+
 .character-item p {
     margin: 0;
     font-size: 0.9em;
