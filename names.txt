@@ -30,7 +30,6 @@ Deidara
 Sasori
 Hidan 
 Kakuzu
-Zetsu 
 Konan
 Nagato
 Yahiko 
@@ -56,7 +55,6 @@ Orochimaru
 Utakata 
 A (Third Raikage)
 Konohamaru Sarutobi 
-Dosu Kinuta
 Genma Shiranui 
 Aoba Yamashiro 
 Kotetsu Hagane
@@ -64,7 +62,6 @@ Izumo Kamizuki
 Ao 
 Torune Aburame
 Gari 
-Kie
 Tenten 
 Shizune
 Ōnoki 

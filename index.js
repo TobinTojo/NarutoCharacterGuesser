@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const aboutDiv = document.getElementById('about-popup');
     const closeHelpButton = document.getElementById('closeHelp');
     const closeAboutButton = document.getElementById('closeAbout');
+    const charactersButton = document.getElementById('characterButton');
+    const charactersPopup = document.getElementById('charactersPopup');
+    const closeCharactersButton = document.getElementById('closeCharacters');
+    const charactersGrid = document.getElementById('charactersGrid');
     
     let characters = [];
     let targetCharacter = null;
@@ -59,9 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 clan: '',         // Placeholder for clan
                 abilities: '',    // Placeholder for abilities
                 status: '',       // Placeholder for status
-                gender: ''        // Placeholder for gender
+                gender: '',        // Placeholder for gender
+                imageUrl: ''
             };
         }).filter(character => character.name); // Filter out any empty names
+
+        // Load character images
+        loadCharacterImages();
 
         // Pick a random character from the list
         targetCharacter = characters[Math.floor(Math.random() * characters.length)];
@@ -494,6 +502,39 @@ document.addEventListener('DOMContentLoaded', () => {
             return '';
         }
     }
+
+    function loadCharacterImages() {
+        characters.forEach(character => {
+            fetch(`https://narutodb.xyz/api/character/search?name=${encodeURIComponent(character.name)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const images = data.images;
+                    if (images && images.length > 0) {
+                        character.imageUrl = images[images.length - 1];
+                    }
+                })
+                .catch(error => console.error(`Error fetching image for ${character.name}:`, error));
+        });
+    }
+
+    // Show Characters Popup
+    charactersButton.addEventListener('click', () => {
+        charactersGrid.innerHTML = '';
+        characters.forEach(character => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <img src="${character.imageUrl || 'placeholder.jpg'}" alt="${character.name}">
+                <div>${character.name}</div>
+            `;
+            charactersGrid.appendChild(div);
+        });
+        charactersPopup.style.display = 'flex';
+    });
+
+    // Close Characters Popup
+    closeCharactersButton.addEventListener('click', () => {
+        charactersPopup.style.display = 'none';
+    });
 
     function loadStats() {
         const savedStats = JSON.parse(localStorage.getItem('narutoCharacterGuessStats'));

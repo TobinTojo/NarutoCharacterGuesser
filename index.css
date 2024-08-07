@@ -150,6 +150,16 @@ button:hover {
     color: #ffffff; /* White text for headers */
 }
 
+#closeCharacters {
+    background-color: #5865f2; /* Discord blue */
+    color: #ffffff; /* White text color */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
 #closeStats {
     background-color: #5865f2; /* Discord blue */
     color: #ffffff; /* White text color */
@@ -185,7 +195,7 @@ button:hover {
     margin-top: 20px;     /* Margin from the top */
 }
 
-#statsButton, #helpButton, #aboutButton {
+#statsButton, #helpButton, #aboutButton, #characterButton {
     display: inline-block;  /* Ensure buttons are inline-block */
     padding: 10px 20px;     /* Padding for buttons */
     font-size: 16px;        /* Font size for buttons */
@@ -196,17 +206,17 @@ button:hover {
     color: #ffffff;         /* White text color */
 }
 
-#statsButton:hover, #helpButton:hover, #aboutButton:hover {
+#statsButton:hover, #helpButton:hover, #aboutButton:hover, #characterButton:hover {
     background-color: #4752c4; /* Slightly darker blue on hover */
 }
 
 
-#closeStats, #statsButton, #helpButton, #aboutButton {
+#closeStats, #statsButton, #helpButton, #aboutButton, #characterButton {
     margin-top: 20px;
     background-color: #5865f2; /* Discord blue */
 }
 
-#closeStats:hover, #statsButton:hover, #helpButton:hover, #aboutButton:hover {
+#closeStats:hover, #statsButton:hover, #helpButton:hover, #aboutButton:hover, #characterButton:hover {
     background-color: #4752c4; /* Slightly darker blue on hover */
 }
 
@@ -491,8 +501,81 @@ header {
     margin-top: 50px;
 }
 
+/* CSS for Characters Section */
+#charactersPopup {
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh; /* Adjust height as needed */
+    overflow-y: auto; /* Enable vertical scrollbar if content overflows */
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #40444b; /* Dark background for popup */
+}
 
+#characters-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Take up remaining space */
+}
+
+#charactersGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    flex: 1; /* Take up remaining space */
+}
+
+.character-item {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #4f545c;
+    border-radius: 5px;
+    background-color: #40444b;
+    color: #dcddde;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    overflow: hidden;
+}
+
+.character-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.character-item p {
+    margin: 0;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.character-item:hover {
+    border-color: #5865f2;
+    background-color: #36393f;
+}
+
+/* Ensure popup height adjusts based on viewport */
 @media screen and (max-width: 1024px) {
+    #charactersPopup {
+        max-height: 80vh; /* Ensure it fits smaller screens */
+    }
+
+    #characters-content {
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+
+    #charactersGrid {
+        gap: 10px; /* Adjust gap for smaller screens */
+    }
+
+    .character-item {
+        width: 80px; /* Adjust item size for smaller screens */
+        height: 80px;
+    }
+
     #results {
         list-style-type: none;
         padding: 0;
@@ -570,7 +653,9 @@ header {
     .guessed {
         font-size: 0.9em; /* Smaller font size for better fit */
     }
-
+    #characters-content {
+        height: 3120%;
+    }
     .popup-content {
         width: 70%; /* Increased width for smaller screens */
         max-width: none; /* Remove the max-width constraint */
@@ -585,7 +670,7 @@ header {
         font-size: 30px; /* Reduce size of close button */
     }
 
-    #statsButton, #helpButton, #aboutButton {
+    #statsButton, #helpButton, #aboutButton, #characterButton {
         display: inline-block;  /* Ensure buttons are inline-block */
         padding: 5px 10px;     /* Padding for buttons */
         font-size: 12px;        /* Font size for buttons */
