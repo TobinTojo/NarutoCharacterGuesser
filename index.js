@@ -477,6 +477,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const images = data.images;
                 const lastImage = images[images.length - 1]; // Get the last image
                 targetCharacter.imageUrl = lastImage; // Store image URL in targetCharacter
+                if (images.length > 1 && !["Naruto Uzumaki", "Moegi Kazamatsuri", "Udon Ise", "Sasuke Uchiha", "Sakura Haruno", "Shikamaru Nara", "Ino Yamanaka", "Chōji Akimichi", "Rock Lee", "Tenten", "Neji Hyūga", "Hinata Hyūga", "Kiba Inuzuka", "Shino Aburame", "Gaara", "Konohamaru Sarutobi"].includes(character.name)) {
+                    targetCharacter.imageUrl = images[0];
+                }
+                
                 if (targetCharacter.name == "Jiraiya")
                     targetCharacter.imageUrl = "images/jiraiya.png";
                 if (guesses >= 8 || gameWon) {
