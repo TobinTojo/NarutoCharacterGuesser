@@ -243,11 +243,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
         if (Array.isArray(clan)) {
             // If clan is an array, clean each item and filter out empty strings
-            return clan.map(cleanString).filter(item => item !== '') || ['None'];
-        } else {
-            // If clan is a string, clean it and return it, default to ['None'] if empty
+            const cleanedArray = clan.map(cleanString).filter(item => item !== '');
+            return cleanedArray.length > 0 ? cleanedArray : ['None'];
+        } else if (typeof clan === 'string') {
+            // If clan is a string, clean it and return it in an array, default to ['None'] if empty
             const cleanedClan = cleanString(clan);
             return cleanedClan ? [cleanedClan] : ['None'];
+        } else {
+            // If clan is neither a string nor an array (e.g., undefined or null), return ['None']
+            return ['None'];
         }
     }
     
@@ -540,6 +544,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const images = data.images;
                     if (images && images.length > 0) {
                         character.imageUrl = images[images.length - 1];
+                        if (images.length > 1 && !["Naruto Uzumaki", "Moegi Kazamatsuri", "Udon Ise", "Sasuke Uchiha", "Sakura Haruno", "Shikamaru Nara", "Ino Yamanaka", "Chōji Akimichi", "Rock Lee", "Tenten", "Neji Hyūga", "Hinata Hyūga", "Kiba Inuzuka", "Shino Aburame", "Gaara", "Konohamaru Sarutobi"].includes(character.name)) {
+                            character.imageUrl = images[0];
+                        }
+                        
                         if (character.name == "Jiraiya")
                             character.imageUrl = "images/jiraiya.png";
                     }

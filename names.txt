@@ -3,7 +3,6 @@ A (Fourth Raikage)
 Shibi Aburame
 Shino Aburame
 Torune Aburame
-Akamaru
 Akatsuchi
 Jinin Akebino
 Chōji Akimichi
@@ -13,7 +12,6 @@ Ao
 Baki
 Jūzō Biwa
 C
-Chiyo
 Chōjūrō
 Darui
 Deidara
@@ -72,7 +70,6 @@ Minato Namikaze
 Shikaku Nara
 Shikamaru Nara
 Yoshino Nara
-Nawaki
 Yugito Nii
 Rin Nohara
 Omoi
@@ -98,7 +95,6 @@ Danzō Shimura
 Genma Shiranui
 Shizune
 Fuguki Suikazan
-Tayuya
 Temari
 Tenten
 Mei Terumī
