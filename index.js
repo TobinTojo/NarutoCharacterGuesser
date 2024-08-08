@@ -54,8 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Split the data by new lines and map each line to an object with name and empty properties
         characters = data.split('\n').map(line => {
             const name = line.trim(); // Remove any extra whitespace
+            const normalizedName = normalizeString(name); // Normalize name
             return { 
                 name,
+                normalizedName, // Store normalized name
                 rank: '',         // Placeholder for rank
                 village: '',      // Placeholder for village
                 height: '',       // Placeholder for height
@@ -84,14 +86,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     searchBar.addEventListener('input', () => {
-        const searchTerm = searchBar.value.toLowerCase();
+        const searchTerm = normalizeString(searchBar.value);
         autocomplete.innerHTML = '';
-
+    
         if (searchTerm.trim() === '') {
             showAllNames(); // Show all names if search bar is empty
         } else {
-            const filteredCharacters = characters.filter(character => 
-                character.name.toLowerCase().includes(searchTerm) && !guessedCharacters.has(character.name)
+            const filteredCharacters = characters.filter(character =>
+                normalizeString(character.name).includes(searchTerm) && !guessedCharacters.has(character.name)
             );
             filteredCharacters.forEach(character => {
                 const li = document.createElement('li');
@@ -104,7 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+    
 
+    function normalizeString(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+    
+
+    
     function cmToFeetAndInches(cm) {
         const totalInches = cm / 2.54;
         const feet = Math.floor(totalInches / 12);
@@ -226,6 +235,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return processedNatures.length > 0 ? processedNatures : ['None'];
     }
     
+    function cleanClan(clan) {
+        // Function to clean individual clan strings
+        const cleanString = (str) => str
+            .replace(/\s*\(Anime only\)/gi, '') // Remove "(Anime only)" (case-insensitive)
+            .trim(); // Trim any leading or trailing whitespace
+    
+        if (Array.isArray(clan)) {
+            // If clan is an array, clean each item and filter out empty strings
+            return clan.map(cleanString).filter(item => item !== '') || ['None'];
+        } else {
+            // If clan is a string, clean it and return it, default to ['None'] if empty
+            const cleanedClan = cleanString(clan);
+            return cleanedClan ? [cleanedClan] : ['None'];
+        }
+    }
     
     
     
@@ -239,8 +263,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return; // Do nothing if game is won or 8 guesses are already made
         }
 
-        const searchTerm = searchBar.value.toLowerCase();
-        const filteredCharacters = characters.filter(character => character.name.toLowerCase() === searchTerm);
+        const searchTerm = normalizeString(searchBar.value);
+    const filteredCharacters = characters.filter(character =>
+        normalizeString(character.name) === searchTerm
+    );
 
         if (filteredCharacters.length > 0) {
             const character = filteredCharacters[0];
@@ -297,7 +323,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const cleanedNatureTypes = cleanChakraNature(data.natureType || ['None']);
 
             // Get clan or default to 'Unknown'
-            const clan = data.personal?.clan || 'None';
+            const clanData = data.personal?.clan;
+            const clan = cleanClan(clanData);
             
             const villageMap = {
                 'Konohagakure': 'Hidden Leaf Village',
@@ -446,6 +473,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const images = data.images;
                 const lastImage = images[images.length - 1]; // Get the last image
                 targetCharacter.imageUrl = lastImage; // Store image URL in targetCharacter
+                if (targetCharacter.name == "Jiraiya")
+                    targetCharacter.imageUrl = "images/jiraiya.png";
                 if (guesses >= 8 || gameWon) {
                     showPopup(); // Show popup when the game ends
                 }
@@ -511,6 +540,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const images = data.images;
                     if (images && images.length > 0) {
                         character.imageUrl = images[images.length - 1];
+                        if (character.name == "Jiraiya")
+                            character.imageUrl = "images/jiraiya.png";
                     }
                 })
                 .catch(error => console.error(`Error fetching image for ${character.name}:`, error));
@@ -559,7 +590,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             stats.currentStreak = 0;
         }
-        stats.guessDistribution[Math.min(guesses, 7)]++;
+        const adjustedGuesses = Math.max(0, guesses - 1); // Ensure guesses don't go below 0
+
+        stats.guessDistribution[Math.min(adjustedGuesses, 7)]++;
         stats.rank = calculateRank(); // Update rank based on current stats
         saveStats();
     }
