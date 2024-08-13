@@ -18,6 +18,7 @@ Deidara
 Might Duy
 Ebisu
 Fū
+Rasa
 Gaara
 Kakuzu
 Gari
@@ -33,6 +34,7 @@ Kakashi Hatake
 Sakumo Hatake
 Hidan
 Kisame Hoshigaki
+Gengetsu Hōzuki
 Mangetsu Hōzuki
 Suigetsu Hōzuki
 Hanabi Hyūga
@@ -74,6 +76,7 @@ Yoshino Nara
 Yugito Nii
 Rin Nohara
 Omoi
+Mū
 Ōnoki
 Orochimaru
 Asura Ōtsutsuki

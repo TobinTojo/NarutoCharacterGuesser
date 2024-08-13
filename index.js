@@ -272,36 +272,41 @@ document.addEventListener('DOMContentLoaded', () => {
         normalizeString(character.name) === searchTerm
     );
 
-        if (filteredCharacters.length > 0) {
-            const character = filteredCharacters[0];
-            guessedCharacters.add(character.name);
-            guesses++;
-
-            // Update the dotted box with the guessed character
-            const box = document.getElementById(`box${guesses}`);
-            if (box) {
-                box.textContent = character.name;
-                box.classList.add('guessed');
-
-                // Check if the guessed character is correct
-                if (character.name === targetCharacter.name) {
-                    box.classList.add('correct-guess');
-                    message.textContent = 'You guessed the right character!';
-                    gameWon = true;
-                    searchBar.disabled = true;
-                    playAgainButton.style.display = 'block';
-                    updateStats(true);
-                    fetchCharacterImage(character.name); // Fetch and display image
-                    showPopup(); // Show the popup
-                } else if (guesses >= 8) {
-                    message.textContent = `Game Over! The character was ${targetCharacter.name}.`;
-                    searchBar.disabled = true;
-                    playAgainButton.style.display = 'block';
-                    updateStats(false);
-                    fetchCharacterImage(targetCharacter.name); // Fetch and display image
-                    showPopup(); // Show the popup
-                }
+    if (filteredCharacters.length > 0) {
+        const character = filteredCharacters[0];
+        guessedCharacters.add(character.name);
+        guesses++;
+    
+        // Update the dotted box with the guessed character's image
+        const box = document.getElementById(`box${guesses}`);
+        if (box) {
+            box.textContent = ''; // Clear existing text
+            const img = document.createElement('img');
+            img.src = character.imageUrl;
+            img.alt = character.name;
+            box.appendChild(img);
+            box.classList.add('guessed');
+    
+            // Check if the guessed character is correct
+            if (character.name === targetCharacter.name) {
+                box.classList.add('correct-guess');
+                message.textContent = 'You guessed the right character!';
+                gameWon = true;
+                searchBar.disabled = true;
+                playAgainButton.style.display = 'block';
+                updateStats(true);
+                fetchCharacterImage(character.name);
+                showPopup();
+            } else if (guesses >= 8) {
+                message.textContent = `Game Over! The character was ${targetCharacter.name}.`;
+                searchBar.disabled = true;
+                playAgainButton.style.display = 'block';
+                updateStats(false);
+                fetchCharacterImage(targetCharacter.name);
+                showPopup();
             }
+        }
+    
             const url = `https://narutodb.xyz/api/character/search?name=${encodeURIComponent(character.name)}`;
 
             const response = await fetch(url);
@@ -378,20 +383,37 @@ document.addEventListener('DOMContentLoaded', () => {
             character.status = data.personal?.status || 'Alive';
             character.gender = data.personal?.sex || 'Unknown';
             console.log(character);
-
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <div>${character.name}</div>
-                <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
-                <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
-                <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrow(character.height, targetCharacter.height)}</div>
-                <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
-                <div class="${getClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
-                <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
-                <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
-                <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
-            `;
-            results.appendChild(li);
+            if (getClass(character.name, targetCharacter.name) == "correct") {
+                const li = document.createElement('li-correct');
+                li.innerHTML = `
+                    <div class="${getClass(character.name, targetCharacter.name)}">${character.name}</div>
+                    <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
+                    <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
+                    <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrow(character.height, targetCharacter.height)}</div>
+                    <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
+                    <div class="${getClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
+                    <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
+                    <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
+                    <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
+                `;
+                results.appendChild(li);
+            }
+            else {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="${getClass(character.name, targetCharacter.name)}">${character.name}</div>
+                    <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
+                    <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
+                    <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrow(character.height, targetCharacter.height)}</div>
+                    <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
+                    <div class="${getClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
+                    <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
+                    <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
+                    <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
+                `;
+                results.appendChild(li);
+            }
+           
 
             searchBar.value = '';
             showAllNames(); // Show all names after a guess
@@ -548,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const images = data.images;
                     if (images && images.length > 0) {
                         character.imageUrl = images[images.length - 1];
-                        if (images.length > 1 && !["Naruto Uzumaki", "Moegi Kazamatsuri", "Udon Ise", "Sasuke Uchiha", "Sakura Haruno", "Shikamaru Nara", "Ino Yamanaka", "Chōji Akimichi", "Rock Lee", "Tenten", "Neji Hyūga", "Hinata Hyūga", "Kiba Inuzuka", "Shino Aburame", "Gaara", "Konohamaru Sarutobi"].includes(character.name)) {
+                        if (images.length > 1 && !["Naruto Uzumaki", "Moegi Kazamatsuri", "Udon Ise", "Sasuke Uchiha", "Sakura Haruno", "Shikamaru Nara", "Ino Yamanaka", "Chōji Akimichi", "Rock Lee", "Tenten", "Neji Hyūga", "Hinata Hyūga", "Kiba Inuzuka", "Shino Aburame", "Gaara", "Temari", "Kankurō", "Konohamaru Sarutobi"].includes(character.name)) {
                             character.imageUrl = images[0];
                         }
                         
