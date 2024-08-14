@@ -78,14 +78,24 @@ h1 {
 }
 
 #autocomplete li {
-    padding: 10px;
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Vertically center the content */
+    height: 55px;
+    padding: 0 10px; /* Padding for spacing */
     cursor: pointer;
     color: #dcddde; /* Light text color */
+    border-bottom: 1px solid #4f545c; /* Border between items */
+}
+
+#autocomplete li img {
+    height: 55px; /* Set image height */
+    margin-right: 10px; /* Space between image and text */
 }
 
 #autocomplete li:hover {
     background-color: #36393f; /* Slightly lighter on hover */
 }
+
 
 #results {
     list-style-type: none;
@@ -602,7 +612,6 @@ header {
 }
 
 
-
 /* Ensure popup height adjusts based on viewport */
 @media screen and (max-width: 1024px) {
 
@@ -674,7 +683,7 @@ header {
         list-style-type: none;
         padding: 0px;
         margin: 0px;
-        width: 200px;
+        width: 250px;
         border: 1px solid rgb(79, 84, 92);
         max-height: 150px;
         overflow-y: auto;

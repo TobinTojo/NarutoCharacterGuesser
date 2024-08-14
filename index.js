@@ -113,7 +113,14 @@ document.addEventListener('DOMContentLoaded', () => {
             );
             filteredCharacters.forEach(character => {
                 const li = document.createElement('li');
-                li.textContent = character.name;
+                const img = document.createElement('img');
+                img.src = character.imageUrl;
+                img.alt = character.name;
+                li.appendChild(img);
+
+                const span = document.createElement('span');
+                span.textContent = character.name;
+                li.appendChild(span);
                 li.addEventListener('click', () => {
                     searchBar.value = character.name;
                     autocomplete.innerHTML = '';
@@ -486,12 +493,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showAllNames() {
         autocomplete.innerHTML = '';
+        const placeholderImage = 'path/to/placeholder-image.png'; // Path to placeholder image
+    
         const sortedCharacters = characters.filter(character => !guessedCharacters.has(character.name))
                                            .sort((a, b) => a.name.localeCompare(b.name));
-
+    
         sortedCharacters.forEach(character => {
             const li = document.createElement('li');
-            li.textContent = character.name;
+            const img = document.createElement('img');
+            img.src = character.imageUrl || placeholderImage; // Use placeholder if imageUrl is not available
+            img.alt = character.name;
+            li.appendChild(img);
+    
+            const span = document.createElement('span');
+            span.textContent = character.name;
+            li.appendChild(span);
             li.addEventListener('click', () => {
                 searchBar.value = character.name;
                 autocomplete.innerHTML = '';
@@ -499,7 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
             autocomplete.appendChild(li);
         });
     }
-
+    
     function showPopup() {
         popupCharacterName.innerHTML = `<h2>${targetCharacter.name}</h2>`;
 
@@ -605,8 +621,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadCharacterImages() {
-        characters.forEach(character => {
-            fetch(`https://narutodb.xyz/api/character/search?name=${encodeURIComponent(character.name)}`)
+        // Array to hold promises for fetching images
+        const imagePromises = characters.map(character => {
+            return fetch(`https://narutodb.xyz/api/character/search?name=${encodeURIComponent(character.name)}`)
                 .then(response => response.json())
                 .then(data => {
                     const images = data.images;
@@ -615,14 +632,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (images.length > 1 && !["Naruto Uzumaki", "Moegi Kazamatsuri", "Udon Ise", "Sasuke Uchiha", "Sakura Haruno", "Shikamaru Nara", "Ino Yamanaka", "Chōji Akimichi", "Rock Lee", "Tenten", "Neji Hyūga", "Hinata Hyūga", "Kiba Inuzuka", "Shino Aburame", "Gaara", "Temari", "Kankurō", "Konohamaru Sarutobi"].includes(character.name)) {
                             character.imageUrl = images[0];
                         }
-                        
-                        if (character.name == "Jiraiya")
+                        if (character.name == "Jiraiya") {
                             character.imageUrl = "images/jiraiya.png";
+                        }
                     }
                 })
                 .catch(error => console.error(`Error fetching image for ${character.name}:`, error));
         });
+    
+        // Wait for all promises to complete
+        Promise.all(imagePromises)
+            .then(() => {
+                // Update autocomplete list after all images are loaded
+                searchBar.disabled = false;
+                showAllNames();
+            });
     }
+    
 
     // Show Characters Popup
     charactersButton.addEventListener('click', () => {
