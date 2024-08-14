@@ -64,7 +64,10 @@ h1 {
 #guessButton:hover {
     background-color: #4752c4; /* Slightly darker blue on hover */
 }
-
+.debut-text {
+    font-weight: bold;
+    color: white;
+}
 #autocomplete {
     list-style-type: none;
     padding: 0;

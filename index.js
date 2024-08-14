@@ -82,7 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 abilities: '',    // Placeholder for abilities
                 status: '',       // Placeholder for status
                 gender: '',        // Placeholder for gender
-                imageUrl: ''
+                imageUrl: '',
+                debut: ''
             };
         }).filter(character => character.name); // Filter out any empty names
 
@@ -208,6 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const clan = data.personal?.clan || 'None';
 
             targetCharacter.rank = displayRank;
+            targetCharacter.debut = data.debut?.anime;
+            console.log(targetCharacter.debut);
             targetCharacter.age = partIiAge;
             
             const villageMap = {
@@ -221,7 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Otogakure': 'Hidden Sound Village',
                 'Hoshigakure': 'Hidden Star Village',
                 'Kusagakure': 'Hidden Grass Village',
-                'Yugakure': 'Hidden Hot Water Village'
+                'Yugakure': 'Hidden Hot Water Village',
+                'Uzushiogakure': 'Hidden Eddy Village' // Added Uzushiogakure
             };
             
             // Get the Japanese (romaji) village name(s)
@@ -248,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
             targetCharacter.village = capitalizedVillageName;
             
             console.log(targetCharacter.village); // Outputs the capitalized village name or 'Unknown'
+            
             
 
             targetCharacter.height = partIiHeight;
@@ -383,7 +388,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Get clan or default to 'Unknown'
             const clanData = data.personal?.clan;
             const clan = cleanClan(clanData);
-            
             const villageMap = {
                 'Konohagakure': 'Hidden Leaf Village',
                 'Sunagakure': 'Hidden Sand Village',
@@ -395,7 +399,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Otogakure': 'Hidden Sound Village',
                 'Hoshigakure': 'Hidden Star Village',
                 'Kusagakure': 'Hidden Grass Village',
-                'Yugakure': 'Hidden Hot Water Village'
+                'Yugakure': 'Hidden Hot Water Village',
+                'Uzushiogakure': 'Hidden Eddy Village' // Added Uzushiogakure
             };
             
             // Get the Japanese (romaji) village name(s)
@@ -423,8 +428,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log(character.village); // Outputs the capitalized village name or 'Unknown'
             
+            
 
             character.rank = displayRank;
+            character.debut = data.debut?.anime;
+            console.log(character.debut);
             character.age = partIiAge;
             character.height = partIiHeight;
             character.abilities = cleanedNatureTypes;
@@ -440,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
                     <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrow(character.height, targetCharacter.height)}</div>
                     <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
-                    <div class="${getClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
+                    <div class="${getClanClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
                     <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
                     <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
                     <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
@@ -455,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
                     <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrow(character.height, targetCharacter.height)}</div>
                     <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
-                    <div class="${getClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
+                    <div class="${getClanClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
                     <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
                     <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
                     <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
@@ -582,6 +590,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function getClanClass(personalClan, targetClan) {
+        // Helper function to clean clan names by removing certain terms
+        const cleanClanName = name => name.replace(/\bClan\b/i, '').trim();
+    
+        // Helper function to convert to arrays and clean names
+        const convertAndClean = value => {
+            if (Array.isArray(value)) {
+                return value.map(cleanClanName);
+            }
+            return [cleanClanName(value)];
+        };
+    
+        // Convert and clean clans, then create sets
+        const personalClanSet = new Set(convertAndClean(personalClan));
+        const targetClanSet = new Set(convertAndClean(targetClan));
+    
+        console.log(personalClanSet);
+        console.log(targetClanSet);
+    
+        // Check for a full match
+        if (personalClanSet.size === targetClanSet.size && [...personalClanSet].every(clan => targetClanSet.has(clan))) {
+            return 'correct'; // Full match
+        }
+    
+        // Check for a partial match
+        for (let clan of targetClanSet) {
+            if (personalClanSet.has(clan)) {
+                return 'similar'; // Partial match
+            }
+        }
+    
+        return 'no'; // No match
+    }
+    
     function getChakraClass(abilities, targetAbilities) {
         const abilitiesSet = new Set(abilities);
         const targetAbilitiesSet = new Set(targetAbilities);
@@ -636,6 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             character.imageUrl = "images/jiraiya.png";
                         }
                     }
+                    character.debut = data.debut?.anime;
                 })
                 .catch(error => console.error(`Error fetching image for ${character.name}:`, error));
         });
@@ -650,14 +693,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
 
-    // Show Characters Popup
     charactersButton.addEventListener('click', () => {
         charactersGrid.innerHTML = '';
         characters.forEach(character => {
             const div = document.createElement('div');
             div.innerHTML = `
                 <img src="${character.imageUrl || 'placeholder.jpg'}" alt="${character.name}">
-                <div>${character.name}</div>
+                <div>
+                    ${character.name}
+                    <span style="display:block;"><b class="debut-text">Debut Episode: </b>${character.debut}</span>
+                </div>
             `;
             charactersGrid.appendChild(div);
         });
