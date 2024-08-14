@@ -31,6 +31,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const charactersPopup = document.getElementById('charactersPopup');
     const closeCharactersButton = document.getElementById('closeCharacters');
     const charactersGrid = document.getElementById('charactersGrid');
+    const phrases = [
+        "Welcome to Narutle!",
+        "Try to guess the right character!",
+        "Stuck? Choose a random character to start!",
+        "Enjoy the game and have fun!"
+    ];
+    
+    const typingSpeed = 100; // Speed of typing effect in milliseconds
+    const deletingSpeed = 50; // Speed of deleting effect in milliseconds
+    const pauseDuration = 2000; // Duration to pause after typing a phrase
+    
+    let currentPhraseIndex = 0;
+    let currentCharIndex = 0;
+    let isTyping = true;
+    const typingContainer = document.getElementById('typing-container');
     
     let characters = [];
     let targetCharacter = null;
@@ -45,7 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
         wins: 0,
         guessDistribution: Array(8).fill(0)
     };
-
+    
+    type();
     loadStats();
 
     fetch('names.txt')
@@ -107,6 +123,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
+    function type() {
+        if (isTyping) {
+            typingContainer.textContent += phrases[currentPhraseIndex][currentCharIndex];
+            currentCharIndex++;
+            if (currentCharIndex >= phrases[currentPhraseIndex].length) {
+                isTyping = false;
+                setTimeout(deleteText, pauseDuration);
+            } else {
+                setTimeout(type, typingSpeed);
+            }
+        }
+    }
+    
+    function deleteText() {
+        if (!isTyping) {
+            typingContainer.textContent = typingContainer.textContent.slice(0, -1);
+            if (typingContainer.textContent.length === 0) {
+                isTyping = true;
+                currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+                currentCharIndex = 0;
+                setTimeout(type, typingSpeed);
+            } else {
+                setTimeout(deleteText, deletingSpeed);
+            }
+        }
+    }
 
     function normalizeString(str) {
         return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
