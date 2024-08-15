@@ -34,14 +34,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const phrases = [
         "Welcome to Narutle!",
         "Try to guess the right character!",
+        "If there’s no arrow for age or height, the category is unknown.",
         "Stuck? Choose a random character to start!",
-        "Enjoy the game and have fun!"
     ];
     
     const typingSpeed = 100; // Speed of typing effect in milliseconds
     const deletingSpeed = 50; // Speed of deleting effect in milliseconds
     const pauseDuration = 2000; // Duration to pause after typing a phrase
-    
+    // Get references to the elements by their IDs
+const labelRank = document.getElementById('label-rank');
+const labelVillage = document.getElementById('label-village');
+const labelHeight = document.getElementById('label-height');
+const labelAge = document.getElementById('label-age');
+const labelClan = document.getElementById('label-clan');
+const labelChakra = document.getElementById('label-chakra');
+const labelStatus = document.getElementById('label-status');
+const labelGender = document.getElementById('label-gender');
+
+
     let currentPhraseIndex = 0;
     let currentCharIndex = 0;
     let isTyping = true;
@@ -177,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return age.slice(-2).trim();
         }
         return 'Unknown'; // Return 'Unknown' if age is not available
-    }
+    } 
     
     
     async function setTargetCharacter() {
@@ -526,7 +536,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function showPopup() {
         popupCharacterName.innerHTML = `<h2>${targetCharacter.name}</h2>`;
-
+        labelRank.textContent = targetCharacter.rank;
+        labelVillage.textContent = targetCharacter.village;
+        labelHeight.textContent = targetCharacter.height;
+        labelAge.textContent = targetCharacter.age;
+        labelClan.textContent = targetCharacter.clan;
+        labelChakra.textContent = targetCharacter.abilities;
+        labelStatus.textContent = targetCharacter.status;
+        labelGender.textContent = targetCharacter.gender;
         popupImageContainer.innerHTML = ''; // Clear previous image
         if (targetCharacter.imageUrl) {
             const img = document.createElement('img');
