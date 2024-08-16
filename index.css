@@ -8,6 +8,15 @@ body {
     color: #dcddde; /* Light gray text */
 }
 
+.list-bullet {
+    list-style: bullet;
+    background-color: #333333;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: left;
+}
+
 #hero-img {
     height: 300px; 
     margin: 20px;

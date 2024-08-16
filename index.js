@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const charactersGrid = document.getElementById('charactersGrid');
     const phrases = [
         "Welcome to Narutle!",
-        "Try to guess the right character!",
+        "Try to guess the correct character within 8 attempts!",
         "If there’s no arrow for age or height, the category is unknown.",
         "Stuck? Choose a random character to start!",
     ];
