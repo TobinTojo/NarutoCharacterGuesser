@@ -4,9 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Narutle</title>
+    <link rel="icon" href="./images/naruto-icon.png">
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+      </script>
     <nav class="navbar">
         <button id="statsButton">Stats</button>
         <button id="helpButton">Help</button>
@@ -125,6 +133,9 @@
             <div id="popupImageContainer" class="image-container">
                 <!-- Image will be dynamically inserted here -->
             </div>
+            <div id="characterMessage">
+                <!-- Message will be dynamically inserted here -->
+            </div>
             <ul id="stats-result">
                 <li id="label-box-stats">
                     <div class="label-stats">Rank</div>
@@ -160,6 +171,6 @@
     <div id="footer-section">
         <h3 id="footer-text">© 2024 Tobin Tojo.</h3>
     </div>
-    <script src="index.js"></script>
+    <script type="module" src="index.js"></script>
 </body>
 </html>

@@ -1,4 +1,14 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 document.addEventListener('DOMContentLoaded', () => {
+            // Fetch your API_KEY
+            const API_KEY = "AIzaSyANHT-WT6qXLhpaHBHdt1J9YaCv72St48c";
+  
+            // Access your API key (see "Set up your API key" above)
+            const genAI = new GoogleGenerativeAI(API_KEY);
+      
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
+    
     // DOM element references
     const searchBar = document.getElementById('searchBar');
     const guessButton = document.getElementById('guessButton'); // Added guessButton
@@ -19,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const popup = document.getElementById('popup');
     const popupImageContainer = document.getElementById('popupImageContainer');
     const popupMessage = document.getElementById('popupMessage');
+    const chatacterMessage = document.getElementById('characterMessage');
     const popupCharacterName = document.getElementById('popupCharacterName');
     const playAgainPopup = document.getElementById('playAgainPopup');
     const closePopup = document.getElementById('closePopup');
@@ -154,6 +165,14 @@ const labelGender = document.getElementById('label-gender');
         }
     }
     
+    async function run() {
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const result = await model.generateContent([
+            `Within 20 words, come up with a fun fact about ${targetCharacter.name} who is a character from Naruto. Full context in case you are confused ${targetCharacter}`
+        ]);
+          characterMessage.innerHTML = result.response.text();
+    }
+    
     function deleteText() {
         if (!isTyping) {
             typingContainer.textContent = typingContainer.textContent.slice(0, -1);
@@ -225,6 +244,7 @@ const labelGender = document.getElementById('label-gender');
             
             const villageMap = {
                 'Konohagakure': 'Hidden Leaf Village',
+                'Land of Iron': 'Land of Iron',
                 'Sunagakure': 'Hidden Sand Village',
                 'Kirigakure': 'Hidden Mist Village',
                 'Kumogakure': 'Hidden Cloud Village',
@@ -545,6 +565,7 @@ const labelGender = document.getElementById('label-gender');
         labelStatus.textContent = targetCharacter.status;
         labelGender.textContent = targetCharacter.gender;
         popupImageContainer.innerHTML = ''; // Clear previous image
+        run();
         if (targetCharacter.imageUrl) {
             const img = document.createElement('img');
             img.src = targetCharacter.imageUrl;
@@ -555,7 +576,6 @@ const labelGender = document.getElementById('label-gender');
         } else {
             popupImageContainer.textContent = 'Image not found.';
         }
-
         // Display the message and number of tries
         if (gameWon) {
             popupMessage.innerHTML = `You guessed the right character!<br>It took you <span class="number-of-tries">${guesses}</span> tries.`;
