@@ -61,7 +61,7 @@ const labelClan = document.getElementById('label-clan');
 const labelChakra = document.getElementById('label-chakra');
 const labelStatus = document.getElementById('label-status');
 const labelGender = document.getElementById('label-gender');
-
+let targetInfo = null;
 
     let currentPhraseIndex = 0;
     let currentCharIndex = 0;
@@ -168,7 +168,7 @@ const labelGender = document.getElementById('label-gender');
     async function run() {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const result = await model.generateContent([
-            `Within 20 words, come up with a fun fact about ${targetCharacter.name} who is a character from Naruto. Full context in case you are confused ${targetCharacter}`
+            `In 20 words, make a fun fact about ${targetCharacter.name} from Naruto. Use information from this ${targetInfo}`
         ]);
           characterMessage.innerHTML = result.response.text();
     }
@@ -208,12 +208,56 @@ const labelGender = document.getElementById('label-gender');
         return 'Unknown'; // Return 'Unknown' if age is not available
     } 
     
+    function formatDataToText(data) {
+        return `
+            ID: ${data.id ?? 'Unknown'}
+            Name: ${data.name ?? 'Unknown'}
+            Images: ${Array.isArray(data.images) && data.images.length > 0 ? data.images.join(', ') : 'Unknown'}
+            Debut:
+                Manga: ${data.debut?.manga ?? 'Unknown'}
+                Anime: ${data.debut?.anime ?? 'Unknown'}
+                Novel: ${data.debut?.novel ?? 'Unknown'}
+                Movie: ${data.debut?.movie ?? 'Unknown'}
+                Game: ${data.debut?.game ?? 'Unknown'}
+                OVA: ${data.debut?.ova ?? 'Unknown'}
+                Appears In: ${data.debut?.appearsIn ?? 'Unknown'}
+            Family:
+                Father: ${data.family?.father ?? 'Unknown'}
+                Brother: ${data.family?.brother ?? 'Unknown'}
+            Jutsu: ${Array.isArray(data.jutsu) && data.jutsu.length > 0 ? data.jutsu.join(', ') : 'Unknown'}
+            Nature Types: ${Array.isArray(data.natureType) && data.natureType.length > 0 ? data.natureType.join(', ') : 'Unknown'}
+            Personal:
+                Birthdate: ${data.personal?.birthdate ?? 'Unknown'}
+                Sex: ${data.personal?.sex ?? 'Unknown'}
+                Status: ${data.personal?.status ?? 'Unknown'}
+                Height: ${data.personal?.height?.['Part II'] ?? 'Unknown'}
+                Weight: ${data.personal?.weight?.['Part II'] ?? 'Unknown'}
+                Blood Type: ${data.personal?.bloodType ?? 'Unknown'}
+                Kekkei Genkai: ${Array.isArray(data.personal?.kekkeiGenkai) && data.personal.kekkeiGenkai.length > 0 ? data.personal.kekkeiGenkai.join(', ') : 'Unknown'}
+                Kekkei Mōra: ${data.personal?.kekkeiMōra ?? 'Unknown'}
+                Classification: ${Array.isArray(data.personal?.classification) && data.personal.classification.length > 0 ? data.personal.classification.join(', ') : 'Unknown'}
+                Tailed Beast: ${data.personal?.tailedBeast ?? 'Unknown'}
+                Occupation: ${Array.isArray(data.personal?.occupation) && data.personal.occupation.length > 0 ? data.personal.occupation.join(', ') : 'Unknown'}
+                Affiliation: ${Array.isArray(data.personal?.affiliation) && data.personal.affiliation.length > 0 ? data.personal.affiliation.join(', ') : 'Unknown'}
+                Partner: ${Array.isArray(data.personal?.partner) && data.personal.partner.length > 0 ? data.personal.partner.join(', ') : 'Unknown'}
+                Clan: ${data.personal?.clan ?? 'Unknown'}
+                Titles: ${Array.isArray(data.personal?.titles) && data.personal.titles.length > 0 ? data.personal.titles.join(', ') : 'Unknown'}
+            Tools: ${Array.isArray(data.tools) && data.tools.length > 0 ? data.tools.join(', ') : 'Unknown'}
+            Unique Traits: ${Array.isArray(data.uniqueTraits) && data.uniqueTraits.length > 0 ? data.uniqueTraits.join(', ') : 'Unknown'}
+            Voice Actors:
+                Japanese: ${Array.isArray(data.voiceActors?.japanese) && data.voiceActors.japanese.length > 0 ? data.voiceActors.japanese.join(', ') : 'Unknown'}
+                English: ${Array.isArray(data.voiceActors?.english) && data.voiceActors.english.length > 0 ? data.voiceActors.english.join(', ') : 'Unknown'}
+        `;
+    }
+    
+    
     
     async function setTargetCharacter() {
             const url = `https://narutodb.xyz/api/character/search?name=${encodeURIComponent(targetCharacter.name)}`;
 
             const response = await fetch(url);
             const data = await response.json();
+            targetInfo = formatDataToText(data);
             // Extract Part I and Part II ranks
             const partIiRank = data.rank?.ninjaRank?.['Part II'];
             const partIRank = data.rank?.ninjaRank?.['Part I'];
@@ -323,6 +367,7 @@ const labelGender = document.getElementById('label-gender');
         // Function to clean individual clan strings
         const cleanString = (str) => str
             .replace(/\s*\(Anime only\)/gi, '') // Remove "(Anime only)" (case-insensitive)
+            .replace(/\s*\(Novel only\)/gi, '')  
             .trim(); // Trim any leading or trailing whitespace
     
         if (Array.isArray(clan)) {
