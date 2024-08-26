@@ -168,7 +168,7 @@ let targetInfo = null;
     async function run() {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const result = await model.generateContent([
-            `In 20 words, make a fun fact about ${targetCharacter.name} from Naruto. Use information from this ${targetInfo}`
+            `In 20 words, make a fun fact about ${targetCharacter.name} from Naruto. Use only information from this ${targetInfo}. ONLY talk about one of the following for the fun fact: height, family, jutsus, bloodtype, kekkeiGenkai, affiliation, titles, tools. unique traits, classification.`
         ]);
           characterMessage.innerHTML = result.response.text();
     }
@@ -521,7 +521,7 @@ let targetInfo = null;
                     <div class="${getClass(character.name, targetCharacter.name)}">${character.name}</div>
                     <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
                     <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
-                    <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrow(character.height, targetCharacter.height)}</div>
+                    <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrowHeight(character.height, targetCharacter.height)}</div>
                     <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
                     <div class="${getClanClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
                     <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
@@ -536,7 +536,7 @@ let targetInfo = null;
                     <div class="${getClass(character.name, targetCharacter.name)}">${character.name}</div>
                     <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
                     <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
-                    <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrow(character.height, targetCharacter.height)}</div>
+                    <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrowHeight(character.height, targetCharacter.height)}</div>
                     <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
                     <div class="${getClanClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
                     <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
@@ -663,7 +663,7 @@ let targetInfo = null;
     function getClass(value, targetValue, type) {
         if (value === targetValue) {
             return 'correct';
-        } else if (type === 'height' && compareHeights(value, targetValue) <= 2) {
+        } else if (type === 'height' && compareHeights(value, targetValue) <= 2 && compareHeights(value, targetValue) >= -2) {
             return 'similar';
         } else if (type === 'age' && Math.abs(parseInt(value.replace(' years old', '')) - parseInt(targetValue.replace(' years old', ''))) <= 2) {
             return 'similar';
@@ -724,11 +724,16 @@ let targetInfo = null;
     }
 
     function compareHeights(height1, height2) {
-        const [feet1, inches1] = height1.split("'").map(part => parseInt(part.replace('"', '')));
-        const [feet2, inches2] = height2.split("'").map(part => parseInt(part.replace('"', '')));
-        const totalInches1 = (feet1 * 12) + inches1;
-        const totalInches2 = (feet2 * 12) + inches2;
-        return Math.abs(totalInches1 - totalInches2);
+        const parseHeight = (height) => {
+            // Split the height string by feet and inches
+            const [feet, inches] = height.split("'").map(part => part.replace('"', '').trim());
+            return (parseInt(feet) || 0) * 12 + (parseInt(inches) || 0); // Convert to total inches
+        };
+    
+        const heightInInches1 = parseHeight(height1);
+        const heightInInches2 = parseHeight(height2);
+    
+        return heightInInches1 - heightInInches2; // Return the difference
     }
 
     function getArrow(value, targetValue) {
@@ -743,6 +748,31 @@ let targetInfo = null;
             return '';
         }
     }
+
+    function getArrowHeight(value, targetValue) {
+        // Helper function to convert height string to total inches
+        const parseHeight = (height) => {
+            // Handle case where height may be undefined or invalid
+            if (!height) return 0;
+    
+            // Split the height string by feet and inches
+            const [feet, inches] = height.split("'").map(part => part.replace('"', '').trim());
+            return (parseInt(feet) || 0) * 12 + (parseInt(inches) || 0); // Convert to total inches
+        };
+    
+        const valueInInches = parseHeight(value);
+        const targetValueInInches = parseHeight(targetValue);
+    
+        // Determine which height is larger and return the appropriate arrow
+        if (valueInInches < targetValueInInches) {
+            return '↑'; // Indicates that the current value is less than the target
+        } else if (valueInInches > targetValueInInches) {
+            return '↓'; // Indicates that the current value is greater than the target
+        } else {
+            return ''; // Indicates that the current value is equal to the target
+        }
+    }
+    
 
     function loadCharacterImages() {
         // Array to hold promises for fetching images
