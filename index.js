@@ -1,8 +1,24 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+
+// Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyB6mAPcJtHOXtU2fGZA1ZISHPNCLAb2_dI",
+    authDomain: "narutle-fb8ac.firebaseapp.com",
+    projectId: "narutle-fb8ac",
+    storageBucket: "narutle-fb8ac.firebasestorage.app",
+    messagingSenderId: "304351012509",
+    appId: "1:304351012509:web:efbcd071e52d4b73d11674",
+    measurementId: "G-0N090EVYRG"
+  };
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
 
 document.addEventListener('DOMContentLoaded', () => {
             // Fetch your API_KEY
-            const API_KEY = "AIzaSyANHT-WT6qXLhpaHBHdt1J9YaCv72St48c";
+            const API_KEY = "AIzaSyDBgA-Zbh3sG_kprGBgGfh1KMp4Vn90ucA";
   
             // Access your API key (see "Set up your API key" above)
             const genAI = new GoogleGenerativeAI(API_KEY);
@@ -61,6 +77,7 @@ const labelClan = document.getElementById('label-clan');
 const labelChakra = document.getElementById('label-chakra');
 const labelStatus = document.getElementById('label-status');
 const labelGender = document.getElementById('label-gender');
+
 let targetInfo = null;
 
     let currentPhraseIndex = 0;
@@ -108,20 +125,72 @@ let targetInfo = null;
             };
         }).filter(character => character.name); // Filter out any empty names
 
-        // Load character images
-        loadCharacterImages();
-
+        // Load character data from Firebase
+      loadCharacterData().then(() => {
         // Pick a random character from the list
         targetCharacter = characters[Math.floor(Math.random() * characters.length)];
-
-        // Update the target character and perform necessary operations
         setTargetCharacter();
         console.log(targetCharacter.name);
         searchBar.disabled = false;
-        showAllNames(); // Show all names initially
+        showAllNames();
+      });
     })
     .catch(error => console.error('Error fetching names:', error));
 
+    
+  // New Firebase data loading function
+  async function loadCharacterData() {
+    const promises = characters.map(async (character) => {
+      try {
+        const docRef = doc(db, "Naruto Characters", character.name);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          character.rank = data.Rank || 'Unknown';
+          character.village = data.Village || 'Unknown';
+          character.height = data.Height ? cmToFeetAndInches(data.Height) : 'Unknown';
+          character.age = data.Age || 'Unknown';
+          character.abilities = Array.isArray(data.Chakra) ? data.Chakra.join(', ') : 'None';
+          character.clan = data.Clan || 'None';
+          character.status = data.Status || 'Alive';
+          character.gender = data.Gender || 'Unknown';
+          character.imageUrl = data.Picture || '';
+          console.log(data);
+        }
+      } catch (error) {
+        console.error(`Error loading data for ${character.name}:`, error);
+      }
+    });
+
+    await Promise.all(promises);
+  }
+
+  // Updated setTargetCharacter function for Firebase
+  async function setTargetCharacter() {
+    try {
+      const docRef = doc(db, "Naruto Characters", targetCharacter.name);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        targetCharacter.rank = data.Rank || 'Unknown';
+        targetCharacter.village = data.Village || 'Unknown';
+        targetCharacter.height = data.Height ? cmToFeetAndInches(data.Height) : 'Unknown';
+        targetCharacter.age = data.Age || 'Unknown';
+        targetCharacter.abilities = Array.isArray(data.Chakra) ? data.Chakra.join(', ') : 'None';
+        targetCharacter.clan = data.Clan || 'None';
+        targetCharacter.status = data.Status || 'Alive';
+        targetCharacter.gender = data.Gender || 'Unknown';
+        targetCharacter.imageUrl = data.Picture || '';
+        
+        // Store the raw data for the fun fact generator
+        targetInfo = JSON.stringify(data);
+      }
+    } catch (error) {
+      console.error("Error getting target character:", error);
+    }
+  }
 
     searchBar.addEventListener('input', () => {
         const searchTerm = normalizeString(searchBar.value);
@@ -166,12 +235,11 @@ let targetInfo = null;
     }
     
     async function run() {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const result = await model.generateContent([
-            `In 20 words, make a fun fact about ${targetCharacter.name} from Naruto. Use only information from this ${targetInfo}. ONLY talk about one of the following for the fun fact: height, family, jutsus, bloodtype, kekkeiGenkai, affiliation, titles, tools. unique traits, classification.`
+          `In 20 words, make a fun fact about ${targetCharacter.name} from Naruto. Use only information from this ${targetInfo}. ONLY talk about one of the following for the fun fact: height, family, jutsus, bloodtype, kekkeiGenkai, affiliation, titles, tools. unique traits, classification.`
         ]);
-          characterMessage.innerHTML = result.response.text();
-    }
+        characterMessage.innerHTML = result.response.text();
+      }
     
     function deleteText() {
         if (!isTyping) {
@@ -251,91 +319,6 @@ let targetInfo = null;
     }
     
     
-    
-    async function setTargetCharacter() {
-            const url = `https://narutodb.xyz/api/character/search?name=${encodeURIComponent(targetCharacter.name)}`;
-
-            const response = await fetch(url);
-            const data = await response.json();
-            targetInfo = formatDataToText(data);
-            // Extract Part I and Part II ranks
-            const partIiRank = data.rank?.ninjaRank?.['Part II'];
-            const partIRank = data.rank?.ninjaRank?.['Part I'];
-
-            // Use Part II rank if available, otherwise fall back to Part I rank
-            const displayRank = partIiRank || partIRank || 'Unknown';
-
-            // Convert heights to feet and inches
-            const partIiHeightCm = data.personal?.height?.['Part II'];
-            const partIHeightCm = data.personal?.height?.['Part I'];
-            const partIiHeight = partIiHeightCm ? 
-                cmToFeetAndInches(parseFloat(partIiHeightCm)) : 
-                (partIHeightCm ? cmToFeetAndInches(parseFloat(partIHeightCm)) : 'Unknown');
-
-            // Extract and clean age information
-            const partIiAge = extractLastTwoCharactersOfAge(data.personal?.age?.['Part II']) || 'Unknown';
-
-            // Clean chakra natures
-            const cleanedNatureTypes = cleanChakraNature(data.natureType || ['None']);
-
-            // Get clan or default to 'Unknown'
-            const clan = data.personal?.clan || 'None';
-
-            targetCharacter.rank = displayRank;
-            targetCharacter.debut = data.debut?.anime;
-            console.log(targetCharacter.debut);
-            targetCharacter.age = partIiAge;
-            
-            const villageMap = {
-                'Konohagakure': 'Hidden Leaf Village',
-                'Land of Iron': 'Land of Iron',
-                'Sunagakure': 'Hidden Sand Village',
-                'Kirigakure': 'Hidden Mist Village',
-                'Kumogakure': 'Hidden Cloud Village',
-                'Iwagakure': 'Hidden Stone Village',
-                'Amegakure': 'Hidden Rain Village',
-                'Takigakure': 'Hidden Waterfall Village',
-                'Otogakure': 'Hidden Sound Village',
-                'Hoshigakure': 'Hidden Star Village',
-                'Kusagakure': 'Hidden Grass Village',
-                'Yugakure': 'Hidden Hot Water Village',
-                'Uzushiogakure': 'Hidden Eddy Village' // Added Uzushiogakure
-            };
-            
-            // Get the Japanese (romaji) village name(s)
-            let japaneseVillageName = data.personal?.affiliation;
-            
-            // Handle cases where affiliation is an array or a single string
-            if (Array.isArray(japaneseVillageName)) {
-                // If it's an array, use the first element or default to 'Unknown'
-                japaneseVillageName = japaneseVillageName[0] || 'Unknown';
-            } else {
-                // If it's a string, use it directly or default to 'Unknown'
-                japaneseVillageName = japaneseVillageName || 'Unknown';
-            }
-            
-            // Convert Japanese (romaji) name to English name
-            const englishVillageName = villageMap[japaneseVillageName] || 'Unknown';
-            
-            // Capitalize the first letter of the English name
-            const capitalizedVillageName = englishVillageName === 'Unknown'
-                ? 'Unknown'
-                : englishVillageName.charAt(0).toUpperCase() + englishVillageName.slice(1);
-            
-            // Assign to targetCharacter.village
-            targetCharacter.village = capitalizedVillageName;
-            
-            console.log(targetCharacter.village); // Outputs the capitalized village name or 'Unknown'
-            
-            
-
-            targetCharacter.height = partIiHeight;
-            targetCharacter.abilities = cleanedNatureTypes;
-            targetCharacter.clan = clan;
-            targetCharacter.status = data.personal?.status || 'Alive';
-            targetCharacter.gender = data.personal?.sex || 'Unknown';
-            console.log(targetCharacter);
-    }
     function cleanChakraNature(nature) {
         // Define the valid words and their capitalized versions
         const validNatures = {
@@ -345,22 +328,22 @@ let targetInfo = null;
             'wind': 'Wind',
             'lightning': 'Lightning'
         };
-        
+    
         // Process the input array
         const processedNatures = nature
-            .map(type => 
+            .map(type =>
                 type
-                    .replace(/\s*release\s*/gi, '')             // Remove the word "release" (case-insensitive)
-                    .replace(/\s*\(.*?\)/g, '')                 // Remove any text within parentheses (including the parentheses)
-                    .replace(/[\[\]{}]/g, '')                   // Remove square and curly brackets
-                    .trim()                                      // Trim any leading or trailing whitespace
-                    .toLowerCase()                              // Convert to lowercase for consistent comparison
+                    .replace(/\s*release\s*/gi, '')   // Remove the word "release" (case-insensitive)
+                    .replace(/\s*\(.*?\)/g, '')       // Remove any text within parentheses (including the parentheses)
+                    .replace(/[\[\]{}]/g, '')         // Remove square and curly brackets
+                    .trim()                           // Trim any leading or trailing whitespace
+                    .toLowerCase()                    // Convert to lowercase for consistent comparison
             )
-            .map(type => validNatures[type] || '')         // Map to the proper capitalization or empty if not valid
-            .filter(type => type);                        // Filter out empty strings
-        
+            .map(type => validNatures[type] || '')   // Map to the proper capitalization or empty if not valid
+            .filter(type => type);                   // Filter out empty strings
+    
         // Check if the array is empty and set it to ['None'] if it is
-        return processedNatures.length > 0 ? processedNatures : ['None'];
+        return processedNatures.length > 0 ? processedNatures.join(', ') : ['None'].join(', ');
     }
     
     function cleanClan(clan) {
@@ -373,185 +356,70 @@ let targetInfo = null;
         if (Array.isArray(clan)) {
             // If clan is an array, clean each item and filter out empty strings
             const cleanedArray = clan.map(cleanString).filter(item => item !== '');
-            return cleanedArray.length > 0 ? cleanedArray : ['None'];
+            return cleanedArray.length > 0 ? cleanedArray.join(', ') : 'None';
         } else if (typeof clan === 'string') {
-            // If clan is a string, clean it and return it in an array, default to ['None'] if empty
+            // If clan is a string, clean it and return it, default to 'None' if empty
             const cleanedClan = cleanString(clan);
-            return cleanedClan ? [cleanedClan] : ['None'];
+            return cleanedClan ? cleanedClan : 'None';
         } else {
-            // If clan is neither a string nor an array (e.g., undefined or null), return ['None']
-            return ['None'];
+            // If clan is neither a string nor an array (e.g., undefined or null), return 'None'
+            return 'None';
         }
     }
     
     
-    
-    
-    
-    
-    
+      // Updated handleGuess function for Firebase
+  async function handleGuess() {
+    if (gameWon || guesses >= 8) return;
 
-    async function handleGuess() {
-        if (gameWon || guesses >= 8) {
-            return; // Do nothing if game is won or 8 guesses are already made
-        }
-
-        const searchTerm = normalizeString(searchBar.value);
+    const searchTerm = normalizeString(searchBar.value);
     const filteredCharacters = characters.filter(character =>
-        normalizeString(character.name) === searchTerm
+      normalizeString(character.name) === searchTerm
     );
 
     if (filteredCharacters.length > 0) {
-        const character = filteredCharacters[0];
-        guessedCharacters.add(character.name);
-        guesses++;
-    
-        // Update the dotted box with the guessed character's image
-        const box = document.getElementById(`box${guesses}`);
-        if (box) {
-            box.textContent = ''; // Clear existing text
-            const img = document.createElement('img');
-            img.src = character.imageUrl;
-            img.alt = character.name;
-            box.appendChild(img);
-            box.classList.add('guessed');
-    
-            // Check if the guessed character is correct
-            if (character.name === targetCharacter.name) {
-                box.classList.add('correct-guess');
-                message.textContent = 'You guessed the right character!';
-                gameWon = true;
-                searchBar.disabled = true;
-                playAgainButton.style.display = 'block';
-                updateStats(true);
-                fetchCharacterImage(character.name);
-                showPopup();
-            } else if (guesses >= 8) {
-                message.textContent = `Game Over! The character was ${targetCharacter.name}.`;
-                searchBar.disabled = true;
-                playAgainButton.style.display = 'block';
-                updateStats(false);
-                fetchCharacterImage(targetCharacter.name);
-                showPopup();
-            }
-        }
-    
-            const url = `https://narutodb.xyz/api/character/search?name=${encodeURIComponent(character.name)}`;
+      const character = filteredCharacters[0];
+      guessedCharacters.add(character.name);
+      guesses++;
 
-            const response = await fetch(url);
-            const data = await response.json();
-            // Extract Part I and Part II ranks
-            const partIiRank = data.rank?.ninjaRank?.['Part II'];
-            const partIRank = data.rank?.ninjaRank?.['Part I'];
+      const guessesCount = document.getElementById('guessesCount');
+      guessesCount.textContent = `${8 - guesses}/8`;
 
-            // Use Part II rank if available, otherwise fall back to Part I rank
-            const displayRank = partIiRank || partIRank || 'Unknown';
+      if (character.name === targetCharacter.name) {
+        message.textContent = 'You guessed the right character!';
+        gameWon = true;
+        searchBar.disabled = true;
+        playAgainButton.style.display = 'block';
+        updateStats(true);
+        showPopup();
+      } else if (guesses >= 8) {
+        message.textContent = `Game Over! The character was ${targetCharacter.name}.`;
+        searchBar.disabled = true;
+        playAgainButton.style.display = 'block';
+        updateStats(false);
+        showPopup();
+      }
 
-            // Convert heights to feet and inches
-            const partIiHeightCm = data.personal?.height?.['Part II'];
-            const partIHeightCm = data.personal?.height?.['Part I'];
-            const partIiHeight = partIiHeightCm ? 
-                cmToFeetAndInches(parseFloat(partIiHeightCm)) : 
-                (partIHeightCm ? cmToFeetAndInches(parseFloat(partIHeightCm)) : 'Unknown');
+      // Create a new list item for the result
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div><img src="${character.imageUrl}" alt="${character.name}"></div>
+        <div class="${getClass(character.name, targetCharacter.name)}">${character.name}</div>
+        <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
+        <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
+        <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrowHeight(character.height, targetCharacter.height)}</div>
+        <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
+        <div class="${getClanClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
+        <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
+        <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
+        <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
+      `;
+      results.appendChild(li);
 
-            // Extract and clean age information
-            const partIiAge = extractLastTwoCharactersOfAge(data.personal?.age?.['Part II']) || 'Unknown';
-
-            // Clean chakra natures
-            const cleanedNatureTypes = cleanChakraNature(data.natureType || ['None']);
-
-            // Get clan or default to 'Unknown'
-            const clanData = data.personal?.clan;
-            const clan = cleanClan(clanData);
-            const villageMap = {
-                'Konohagakure': 'Hidden Leaf Village',
-                'Sunagakure': 'Hidden Sand Village',
-                'Kirigakure': 'Hidden Mist Village',
-                'Kumogakure': 'Hidden Cloud Village',
-                'Iwagakure': 'Hidden Stone Village',
-                'Amegakure': 'Hidden Rain Village',
-                'Takigakure': 'Hidden Waterfall Village',
-                'Otogakure': 'Hidden Sound Village',
-                'Hoshigakure': 'Hidden Star Village',
-                'Kusagakure': 'Hidden Grass Village',
-                'Yugakure': 'Hidden Hot Water Village',
-                'Uzushiogakure': 'Hidden Eddy Village' // Added Uzushiogakure
-            };
-            
-            // Get the Japanese (romaji) village name(s)
-            let japaneseVillageName = data.personal?.affiliation;
-            
-            // Handle cases where affiliation is an array or a single string
-            if (Array.isArray(japaneseVillageName)) {
-                // If it's an array, use the first element or default to 'Unknown'
-                japaneseVillageName = japaneseVillageName[0] || 'Unknown';
-            } else {
-                // If it's a string, use it directly or default to 'Unknown'
-                japaneseVillageName = japaneseVillageName || 'Unknown';
-            }
-            
-            // Convert Japanese (romaji) name to English name
-            const englishVillageName = villageMap[japaneseVillageName] || 'Unknown';
-            
-            // Capitalize the first letter of the English name
-            const capitalizedVillageName = englishVillageName === 'Unknown'
-                ? 'Unknown'
-                : englishVillageName.charAt(0).toUpperCase() + englishVillageName.slice(1);
-            
-            // Assign to targetCharacter.village
-            character.village = capitalizedVillageName;
-            
-            console.log(character.village); // Outputs the capitalized village name or 'Unknown'
-            
-            
-
-            character.rank = displayRank;
-            character.debut = data.debut?.anime;
-            console.log(character.debut);
-            character.age = partIiAge;
-            character.height = partIiHeight;
-            character.abilities = cleanedNatureTypes;
-            character.clan = clan;
-            character.status = data.personal?.status || 'Alive';
-            character.gender = data.personal?.sex || 'Unknown';
-            console.log(character);
-            if (getClass(character.name, targetCharacter.name) == "correct") {
-                const li = document.createElement('li-correct');
-                li.innerHTML = `
-                    <div class="${getClass(character.name, targetCharacter.name)}">${character.name}</div>
-                    <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
-                    <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
-                    <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrowHeight(character.height, targetCharacter.height)}</div>
-                    <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
-                    <div class="${getClanClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
-                    <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
-                    <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
-                    <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
-                `;
-                results.appendChild(li);
-            }
-            else {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <div class="${getClass(character.name, targetCharacter.name)}">${character.name}</div>
-                    <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
-                    <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
-                    <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrowHeight(character.height, targetCharacter.height)}</div>
-                    <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
-                    <div class="${getClanClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
-                    <div class="${getChakraClass(character.abilities, targetCharacter.abilities)}">${character.abilities}</div>
-                    <div class="${getClass(character.status, targetCharacter.status)}">${character.status}</div>
-                    <div class="${getClass(character.gender, targetCharacter.gender)}">${character.gender}</div>
-                `;
-                results.appendChild(li);
-            }
-           
-
-            searchBar.value = '';
-            showAllNames(); // Show all names after a guess
-        }
+      searchBar.value = '';
+      showAllNames();
     }
-
+  }
     // Add event listener for the guess button
     guessButton.addEventListener('click', handleGuess);
 
@@ -600,44 +468,125 @@ let targetInfo = null;
     }
     
     function showPopup() {
-        popupCharacterName.innerHTML = `<h2>${targetCharacter.name}</h2>`;
-        labelRank.textContent = targetCharacter.rank;
-        labelVillage.textContent = targetCharacter.village;
-        labelHeight.textContent = targetCharacter.height;
-        labelAge.textContent = targetCharacter.age;
-        labelClan.textContent = targetCharacter.clan;
-        labelChakra.textContent = targetCharacter.abilities;
-        labelStatus.textContent = targetCharacter.status;
-        labelGender.textContent = targetCharacter.gender;
-        popupImageContainer.innerHTML = ''; // Clear previous image
-        run();
-        if (targetCharacter.imageUrl) {
-            const img = document.createElement('img');
-            img.src = targetCharacter.imageUrl;
-            img.alt = 'Character Image';
-            img.style.width = '500px'; // Set width to 500 pixels
-            img.style.height = 'auto'; // Maintain aspect ratio
-            popupImageContainer.appendChild(img);
-        } else {
-            popupImageContainer.textContent = 'Image not found.';
-        }
-        // Display the message and number of tries
-        if (gameWon) {
-            popupMessage.innerHTML = `You guessed the right character!<br>It took you <span class="number-of-tries">${guesses}</span> tries.`;
-        } else {
-            popupMessage.innerHTML = `Game Over! The character was ${targetCharacter.name}.`;
-        }
+    console.log("Shown");
+    popupCharacterName.innerHTML = `<h2>${targetCharacter.name}</h2>`;
+    labelRank.textContent = targetCharacter.rank;
+    labelVillage.textContent = targetCharacter.village;
+    labelHeight.textContent = targetCharacter.height;
+    labelAge.textContent = targetCharacter.age;
+    labelClan.textContent = targetCharacter.clan;
+    labelChakra.textContent = targetCharacter.abilities;
+    labelStatus.textContent = targetCharacter.status;
+    labelGender.textContent = targetCharacter.gender;
+    popupImageContainer.innerHTML = ''; // Clear previous image
+    run();
 
-        popup.style.display = 'block';
-
-        playAgainPopup.onclick = () => {
-            location.reload();
-        };
-
-        closePopup.onclick = () => {
-            popup.style.display = 'none';
-        };
+    if (targetCharacter.imageUrl) {
+        const img = document.createElement('img');
+        img.src = targetCharacter.imageUrl;
+        img.alt = 'Character Image';
+        img.style.width = '500px'; // Set width to 500 pixels
+        img.style.height = 'auto'; // Maintain aspect ratio
+        popupImageContainer.appendChild(img);
+    } else {
+        popupImageContainer.textContent = 'Image not found.';
     }
+
+    // Display the message and number of tries
+    if (gameWon) {
+        popupMessage.innerHTML = `You guessed the right character in <span class="number-of-tries">${guesses}</span> guesses!`;
+    } else {
+        popupMessage.innerHTML = `You did not guess the character correctly. The character was ${targetCharacter.name}.`;
+    }
+
+    // Calculate the current rank based on the number of wins
+    const currentRank = getCurrentRank(stats.wins);
+    const nextRank = getNextRank(currentRank);
+
+    // Calculate wins needed for the next rank
+    const winsNeeded = getWinsToNextRank(nextRank);
+
+    // Update progress bar
+    const progressBar = document.getElementById('progress');
+    const progressText = document.getElementById('winsToNextRank');
+
+    const temporaryRank = document.getElementById('currentRank');
+
+    // Calculate progress percentage
+    const progressPercentage = (stats.wins / (stats.wins + winsNeeded)) * 100;
+    progressBar.style.width = `${progressPercentage}%`;
+    progressText.textContent = winsNeeded;
+    temporaryRank.textContent = currentRank;
+
+    // Show the popup
+    popup.style.display = 'block';
+
+    playAgainPopup.onclick = () => {
+        location.reload();
+    };
+
+    closePopup.onclick = () => {
+        popup.style.display = 'none';
+    };
+}
+
+    
+function getCurrentRank(wins) {
+    // Define the rank thresholds
+    const rankThresholds = [
+        { rank: 'Genin 3', threshold: 0 },
+        { rank: 'Genin 2', threshold: 10 },
+        { rank: 'Genin 1', threshold: 30 },
+        { rank: 'Chunin 3', threshold: 50 },
+        { rank: 'Chunin 2', threshold: 80 },
+        { rank: 'Chunin 1', threshold: 110 },
+        { rank: 'Jonin 3', threshold: 140 },
+        { rank: 'Jonin 2', threshold: 180 },
+        { rank: 'Jonin 1', threshold: 220 },
+        { rank: 'Kage 3', threshold: 250 }
+    ];
+
+    // Determine the current rank based on wins
+    for (let i = rankThresholds.length - 1; i >= 0; i--) {
+        if (wins >= rankThresholds[i].threshold) {
+            return rankThresholds[i].rank;
+        }
+    }
+    return 'Genin 3'; // Default rank
+}
+
+function getNextRank(currentRank) {
+    console.log(currentRank);
+    const rankThresholds = [
+        'Genin 3', 'Genin 2', 'Genin 1', 'Chunin 3', 'Chunin 2', 'Chunin 1', 'Jonin 3', 'Jonin 2', 'Jonin 1'
+    ];
+    
+    const index = rankThresholds.indexOf(currentRank);
+    return index >= 0 ? rankThresholds[index + 1] : null; // Get the next rank
+}
+
+function getWinsToNextRank(nextRank) {
+    if (!nextRank) return 0;
+
+    // Define the rank thresholds
+    const rankThresholds = {
+        'Jonin 1': 220,
+        'Jonin 2': 180,
+        'Jonin 3': 140,
+        'Chunin 1': 110,
+        'Chunin 2': 80,
+        'Chunin 3': 50,
+        'Genin 1': 30,
+        'Genin 2': 10,
+        'Genin 3': 0
+    };
+    console.log(nextRank);
+    // Get the threshold for the next rank
+    const nextRankThreshold = rankThresholds[nextRank] || 0;
+    
+    // Calculate how many more wins are needed to reach the next rank
+    return Math.max(0, nextRankThreshold - stats.wins);
+}
 
     function fetchCharacterImage(characterName) {
         console.log(`Fetching image for: ${characterName}`);
@@ -661,15 +610,28 @@ let targetInfo = null;
     }
 
     function getClass(value, targetValue, type) {
-        if (value === targetValue) {
+        // Convert both values to strings for comparison
+        const strValue = String(value);
+        const strTargetValue = String(targetValue);
+        
+        if (strValue === strTargetValue) {
             return 'correct';
-        } else if (type === 'height' && compareHeights(value, targetValue) <= 2 && compareHeights(value, targetValue) >= -2) {
-            return 'similar';
-        } else if (type === 'age' && Math.abs(parseInt(value.replace(' years old', '')) - parseInt(targetValue.replace(' years old', ''))) <= 2) {
-            return 'similar';
-        } else {
-            return '';
+        } 
+        else if (type === 'height') {
+            const heightDiff = compareHeights(strValue, strTargetValue);
+            if (heightDiff <= 2 && heightDiff >= -2) {
+                return 'similar';
+            }
+        } 
+        else if (type === 'age') {
+            // Convert to numbers for age comparison
+            const numValue = parseInt(strValue.replace(' years old', '')) || 0;
+            const numTargetValue = parseInt(strTargetValue.replace(' years old', '')) || 0;
+            if (Math.abs(numValue - numTargetValue) <= 2) {
+                return 'similar';
+            }
         }
+        return '';
     }
 
     function getClanClass(personalClan, targetClan) {
@@ -725,28 +687,25 @@ let targetInfo = null;
 
     function compareHeights(height1, height2) {
         const parseHeight = (height) => {
-            // Split the height string by feet and inches
+            if (typeof height === 'number') return height; // Already in cm
+            if (!height || height === 'Unknown') return 0;
             const [feet, inches] = height.split("'").map(part => part.replace('"', '').trim());
-            return (parseInt(feet) || 0) * 12 + (parseInt(inches) || 0); // Convert to total inches
+            return (parseInt(feet) || 0) * 12 + (parseInt(inches) || 0);
         };
     
-        const heightInInches1 = parseHeight(height1);
-        const heightInInches2 = parseHeight(height2);
-    
-        return heightInInches1 - heightInInches2; // Return the difference
+        return parseHeight(height1) - parseHeight(height2);
     }
 
     function getArrow(value, targetValue) {
-        if (!value || !targetValue) return '';
-        const val = parseInt(value.replace("'", '').replace('"', '').replace(' years old', ''));
-        const targetVal = parseInt(targetValue.replace("'", '').replace('"', '').replace(' years old', ''));
-        if (val < targetVal) {
-            return '↑';
-        } else if (val > targetVal) {
-            return '↓';
-        } else {
-            return '';
-        }
+        if (!value || !targetValue || value === 'Unknown' || targetValue === 'Unknown') return '';
+        
+        // Handle both string and number inputs
+        const numValue = typeof value === 'number' ? value : parseInt(String(value).replace(/[^0-9]/g, '')) || 0;
+        const numTargetValue = typeof targetValue === 'number' ? targetValue : parseInt(String(targetValue).replace(/[^0-9]/g, '')) || 0;
+        
+        if (numValue < numTargetValue) return '↑';
+        if (numValue > numTargetValue) return '↓';
+        return '';
     }
 
     function getArrowHeight(value, targetValue) {
@@ -861,17 +820,20 @@ let targetInfo = null;
         currentStreakSpan.textContent = stats.currentStreak;
         longestStreakSpan.textContent = stats.longestStreak;
         winPercentageSpan.textContent = ((stats.wins / stats.gamesPlayed) * 100).toFixed(2) + '%';
-
-        guessDistributionUl.innerHTML = '';
+    
+        // Update the histogram
+        const maxGuesses = Math.max(...stats.guessDistribution);
         stats.guessDistribution.forEach((count, index) => {
-            const li = document.createElement('li');
-            li.textContent = `Guesses ${index + 1}: ${count}`;
-            guessDistributionUl.appendChild(li);
+            const bar = document.getElementById(`guess${index + 1}`);
+            if (bar) {
+                const height = (count / maxGuesses) * 100 || 0; // Calculate height as a percentage
+                bar.style.height = `${height}%`;
+            }
         });
-
+    
         updateRankSection(); // Update rank section when stats are displayed
     }
-
+    
     function calculateRank() {
         if (stats.wins >= 220) return 'Jonin 1';
         if (stats.wins >= 180) return 'Jonin 2';
