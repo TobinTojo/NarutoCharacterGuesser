@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Narutle</title>
-    <link rel="icon" href="./images/naruto-icon.png">
+    <!--<link rel="icon" href="./images/naruto-icon.png"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -15,50 +17,50 @@
           }
         }
       </script>
+    <nav class="mobile-nav">
+        <button id="mobileStats"><i class="fas fa-chart-bar"></i></button>
+        <button id="mobileHelp"><i class="fas fa-question-circle"></i></button>
+        <button id="mobileAbout"><i class="fas fa-info-circle"></i></button>
+        <button id="mobileCharacters"><i class="fas fa-users"></i></button>
+    </nav>
+    
     <nav class="navbar">
         <button id="statsButton">Stats</button>
         <button id="helpButton">Help</button>
         <button id="aboutButton">About</button>
         <button id="characterButton">Characters</button>
     </nav>
-    <header>
-        <h1>Narutle</h1>
-        <div id="typing-container"></div>
-    </header>
-    <img src="images/Hero Image.jpg" id="hero-img"/>
+    <section class="hero-overlay">
+        <img src="images/Hero Image.jpg" alt="Naruto Background" class="hero-bg" />
+        <div class="hero-overlay-content">
+            <h1>Narutle</h1>
+            <p class="hero-subtext">Test your ninja intuition—identify the hidden shinobi before your guesses run out!</p>
+            <div id="typing-container"></div>
+        </div>
+    </section>
+    
+    
     <div id="searchContainer">
         <input type="text" id="searchBar" placeholder="Guess the character..." disabled>
         <button id="guessButton">Guess</button>
     </div>
+    <div id="guessesLeft">Guesses Left: <span id="guessesCount">8/8</span></div>
     <!-- Labels for Categories -->
     <ul id="autocomplete"></ul>
     <ul id="results">
         <li id="label-box">
-            <div class="label">Name</div>
-            <div class="label">Rank</div>
-            <div class="label">Village</div>
-            <div class="label">Height</div>
-            <div class="label">Age</div>
-            <div class="label">Clan</div>
-            <div class="label">Chakra Natures</div>
-            <div class="label">Status</div>
-            <div class="label">Gender</div>
+            <div class="label"><i class="fas fa-camera"></i> Photo</div> <!-- New Photo column -->
+            <div class="label"><i class="fas fa-user"></i> Name</div>
+            <div class="label"><i class="fas fa-shield-alt"></i> Rank</div>
+            <div class="label"><i class="fas fa-home"></i> Village</div>
+            <div class="label"><i class="fas fa-ruler-vertical"></i> Height</div>
+            <div class="label"><i class="fas fa-birthday-cake"></i> Age</div>
+            <div class="label"><i class="fas fa-users"></i> Clan</div>
+            <div class="label"><i class="fas fa-fire"></i> Chakra Natures</div>
+            <div class="label"><i class="fas fa-heartbeat"></i> Status</div>
+            <div class="label"><i class="fas fa-venus-mars"></i> Gender</div>
         </li>
     </ul>
-    <!-- Section for Dotted Boxes and Numbered Lines -->
-    <div id="guessSection">
-        <h2 class="header-title">Guesses</h2>
-        <div id="dottedBoxes">
-            <div class="dotted-box" id="box1">1</div>
-            <div class="dotted-box" id="box2">2</div>
-            <div class="dotted-box" id="box3">3</div>
-            <div class="dotted-box" id="box4">4</div>
-            <div class="dotted-box" id="box5">5</div>
-            <div class="dotted-box" id="box6">6</div>
-            <div class="dotted-box" id="box7">7</div>
-            <div class="dotted-box" id="box8">8</div>
-        </div>
-    </div>
     
     <!-- Character Image Container -->
     <div id="characterImageContainer" style="text-align: center; margin-top: 20px;">
@@ -72,18 +74,55 @@
     <div id="stats" class="popup">
         <div class="popup-content">
             <h2>Game Stats</h2>
-            <p>Games Played: <span id="gamesPlayed">0</span></p>
-            <p>Current Streak: <span id="currentStreak">0</span></p>
-            <p>Longest Streak: <span id="longestStreak">0</span></p>
-            <p>Win Percentage: <span id="winPercentage">0%</span></p>
+            <div class="stats-grid">
+                <div class="stats-item">
+                    <span class="stats-label">Games Played</span>
+                    <span class="stats-value" id="gamesPlayed">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">Current Streak</span>
+                    <span class="stats-value" id="currentStreak">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">Longest Streak</span>
+                    <span class="stats-value" id="longestStreak">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">Win Percentage</span>
+                    <span class="stats-value" id="winPercentage">0%</span>
+                </div>
+            </div>
             <!-- Rank Section -->
             <div id="rankSection">
                 <img id="rankImage" src="" alt="Rank Image" style="width: 80px; display: block; margin: 0 auto;">
                 <h3 id="rankHeader">Rank: </h3>
             </div>
+            <!-- Guess Distribution Histogram -->
             <h3>Guess Distribution</h3>
-            <ul id="guessDistribution"></ul>
+            <div id="guessDistributionChart">
+                <div class="chart-bar-container">
+                    <div class="chart-bar" id="guess1"></div>
+                    <div class="chart-bar" id="guess2"></div>
+                    <div class="chart-bar" id="guess3"></div>
+                    <div class="chart-bar" id="guess4"></div>
+                    <div class="chart-bar" id="guess5"></div>
+                    <div class="chart-bar" id="guess6"></div>
+                    <div class="chart-bar" id="guess7"></div>
+                    <div class="chart-bar" id="guess8"></div>
+                </div>
+                <div class="chart-labels">
+                    <span>1</span>
+                    <span>2</span>
+                    <span>3</span>
+                    <span>4</span>
+                    <span>5</span>
+                    <span>6</span>
+                    <span>7</span>
+                    <span>8</span>
+                </div>
+            </div>
             <button id="closeStats" class="close-button">Close</button>
+            <span class="close-icon" id="closeStatsMobile">&times;</span>
         </div>
     </div>
 
@@ -95,11 +134,13 @@
             <p>Try to guess the Naruto character in 8 guesses.</p>
             <p><strong id="green-box">Green</strong> is an exact match.</p>
             <p><strong id="yellow-box">Yellow</strong> is a close match. A close...</p>
+            <p><strong style="color: #dcddde; background-color: #40444b; padding: 2px 5px; border-radius: 2px;">Grey</strong> means no match.</p>
             <ul>
                 <li class="list-bullet">Chakra Nature indicates the character has at least 1 of those chakra natures.</li>
                 <li class="list-bullet">Height or age is off by at most 2.</li>
             </ul>
             <button id="closeHelp" class="close-button">Close</button>
+            <span class="close-icon" id="closeHelpMobile">&times;</span>
         </div>
     </div>
 
@@ -110,12 +151,14 @@
             <img class="popup-image" src="images/about-render.png">
             <p>Inspired by the NBA guessing game Poeltl, Tobin wanted to create a similar experience for Naruto fans to enjoy and test how much they really know about the characters in Naruto Shippuden. Tobin also aimed to create a rank system in the game, drawing inspiration from the shinobi ranks in the anime.</p>
             <button id="closeAbout" class="close-button">Close</button>
+            <span class="close-icon" id="closeAboutMobile">&times;</span>
         </div>
     </div>
 
     <div id="charactersPopup" class="popup">
         <div class="popup-content" id="characters-content">
             <span id="closeCharacters" class="close-button">Close</span>
+            <span class="close-icon" id="closeCharactersMobile">&times;</span>
             <h2>Characters</h2>
             <div id="charactersGrid" class="grid">
                 <!-- Character items will be inserted here dynamically -->
@@ -124,50 +167,59 @@
     </div>
 
     <!-- Popup HTML structure -->
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span id="closePopup" class="close">&times;</span>
-            <div id="popupCharacterName" class="popup-header">
-                <h2>Character Name</h2>
-            </div>
-            <div id="popupImageContainer" class="image-container">
-                <!-- Image will be dynamically inserted here -->
-            </div>
-            <div id="characterMessage">
-                <!-- Message will be dynamically inserted here -->
-            </div>
-            <ul id="stats-result">
-                <li id="label-box-stats">
-                    <div class="label-stats">Rank</div>
-                    <div class="label-stats">Village</div>
-                    <div class="label-stats">Height</div>
-                    <div class="label-stats">Age</div>
-                </li>
-                <li id="label-box-results">
-                    <div class="label-results" id="label-rank">Rank</div>
-                    <div class="label-results" id="label-village">Village</div>
-                    <div class="label-results" id="label-height">Height</div>
-                    <div class="label-results" id="label-age">Age</div>
-                </li>
-                <li id="label-box-stats">
-                    <div class="label-stats">Clan</div>
-                    <div class="label-stats">Chakra Natures</div>
-                    <div class="label-stats">Status</div>
-                    <div class="label-stats">Gender</div>
-                </li>
-                <li id="label-box-results">
-                    <div class="label-results" id="label-clan">Rank</div>
-                    <div class="label-results" id="label-chakra">Village</div>
-                    <div class="label-results" id="label-status">Height</div>
-                    <div class="label-results" id="label-gender">Age</div>
-                </li>
-            </ul>
-            <div id="popupMessage">
-                <!-- Message will be dynamically inserted here -->
-            </div>
-            <button id="playAgainPopup">Play Again</button>
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span id="closePopup" class="close">&times;</span>
+        <div id="popupCharacterName" class="popup-header">
+            <h2>Character Name</h2>
         </div>
+        <div id="popupImageContainer" class="image-container">
+            <!-- Image will be dynamically inserted here -->
+        </div>
+        <div id="characterMessage">
+            <!-- Message will be dynamically inserted here -->
+        </div>
+        <ul id="stats-result">
+            <li id="label-box-stats">
+                <div class="label-stats">Rank</div>
+                <div class="label-stats">Village</div>
+                <div class="label-stats">Height</div>
+                <div class="label-stats">Age</div>
+            </li>
+            <li id="label-box-results">
+                <div class="label-results" id="label-rank">Rank</div>
+                <div class="label-results" id="label-village">Village</div>
+                <div class="label-results" id="label-height">Height</div>
+                <div class="label-results" id="label-age">Age</div>
+            </li>
+            <li id="label-box-stats">
+                <div class="label-stats">Clan</div>
+                <div class="label-stats">Chakra Natures</div>
+                <div class="label-stats">Status</div>
+                <div class="label-stats">Gender</div>
+            </li>
+            <li id="label-box-results">
+                <div class="label-results" id="label-clan">Clan</div>
+                <div class="label-results" id="label-chakra">Chakra Natures</div>
+                <div class="label-results" id="label-status">Status</div>
+                <div class="label-results" id="label-gender">Gender</div>
+            </li>
+        </ul>
+        <div id="popupMessage">
+            <!-- Message will be dynamically inserted here -->
+        </div>
+        <!-- Progress Bar Section -->
+        <div id="progressBarContainer">
+            <div id="rankPlaceHolder">Current Rank: <span id="currentRank"></span></div>
+            <div id="progressBar" class="progress-bar">
+                <div id="progress" class="progress"></div>
+            </div>
+            <div id="progressText">Wins to Next Rank: <span id="winsToNextRank"></span></div>
+        </div>
+        <button id="playAgainPopup">Play Again</button>
     </div>
+</div>
+
     <div id="footer-section">
         <h3 id="footer-text">© 2024 Tobin Tojo.</h3>
     </div>

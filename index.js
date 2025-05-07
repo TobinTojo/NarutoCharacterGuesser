@@ -4,24 +4,22 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 // Initialize Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyB6mAPcJtHOXtU2fGZA1ZISHPNCLAb2_dI",
-    authDomain: "narutle-fb8ac.firebaseapp.com",
-    projectId: "narutle-fb8ac",
-    storageBucket: "narutle-fb8ac.firebasestorage.app",
-    messagingSenderId: "304351012509",
-    appId: "1:304351012509:web:efbcd071e52d4b73d11674",
-    measurementId: "G-0N090EVYRG"
-  };
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+};
+
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
 document.addEventListener('DOMContentLoaded', () => {
             // Fetch your API_KEY
-            const API_KEY = "AIzaSyDBgA-Zbh3sG_kprGBgGfh1KMp4Vn90ucA";
-  
-            // Access your API key (see "Set up your API key" above)
-            const genAI = new GoogleGenerativeAI(API_KEY);
+            const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
       
             const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
     
@@ -156,6 +154,7 @@ let targetInfo = null;
           character.status = data.Status || 'Alive';
           character.gender = data.Gender || 'Unknown';
           character.imageUrl = data.Picture || '';
+          character.debut = data.Debut || 'Unknown';
           console.log(data);
         }
       } catch (error) {
@@ -185,7 +184,7 @@ let targetInfo = null;
         targetCharacter.imageUrl = data.Picture || '';
         
         // Store the raw data for the fun fact generator
-        targetInfo = JSON.stringify(data);
+        targetInfo = JSON.stringify(data.Fact);
       }
     } catch (error) {
       console.error("Error getting target character:", error);
@@ -268,106 +267,6 @@ let targetInfo = null;
         return `${feet}'${inches}"`;
     }
     
-    function extractLastTwoCharactersOfAge(age) {
-        if (age) {
-            // Return the last two characters of the age string
-            return age.slice(-2).trim();
-        }
-        return 'Unknown'; // Return 'Unknown' if age is not available
-    } 
-    
-    function formatDataToText(data) {
-        return `
-            ID: ${data.id ?? 'Unknown'}
-            Name: ${data.name ?? 'Unknown'}
-            Images: ${Array.isArray(data.images) && data.images.length > 0 ? data.images.join(', ') : 'Unknown'}
-            Debut:
-                Manga: ${data.debut?.manga ?? 'Unknown'}
-                Anime: ${data.debut?.anime ?? 'Unknown'}
-                Novel: ${data.debut?.novel ?? 'Unknown'}
-                Movie: ${data.debut?.movie ?? 'Unknown'}
-                Game: ${data.debut?.game ?? 'Unknown'}
-                OVA: ${data.debut?.ova ?? 'Unknown'}
-                Appears In: ${data.debut?.appearsIn ?? 'Unknown'}
-            Family:
-                Father: ${data.family?.father ?? 'Unknown'}
-                Brother: ${data.family?.brother ?? 'Unknown'}
-            Jutsu: ${Array.isArray(data.jutsu) && data.jutsu.length > 0 ? data.jutsu.join(', ') : 'Unknown'}
-            Nature Types: ${Array.isArray(data.natureType) && data.natureType.length > 0 ? data.natureType.join(', ') : 'Unknown'}
-            Personal:
-                Birthdate: ${data.personal?.birthdate ?? 'Unknown'}
-                Sex: ${data.personal?.sex ?? 'Unknown'}
-                Status: ${data.personal?.status ?? 'Unknown'}
-                Height: ${data.personal?.height?.['Part II'] ?? 'Unknown'}
-                Weight: ${data.personal?.weight?.['Part II'] ?? 'Unknown'}
-                Blood Type: ${data.personal?.bloodType ?? 'Unknown'}
-                Kekkei Genkai: ${Array.isArray(data.personal?.kekkeiGenkai) && data.personal.kekkeiGenkai.length > 0 ? data.personal.kekkeiGenkai.join(', ') : 'Unknown'}
-                Kekkei Mōra: ${data.personal?.kekkeiMōra ?? 'Unknown'}
-                Classification: ${Array.isArray(data.personal?.classification) && data.personal.classification.length > 0 ? data.personal.classification.join(', ') : 'Unknown'}
-                Tailed Beast: ${data.personal?.tailedBeast ?? 'Unknown'}
-                Occupation: ${Array.isArray(data.personal?.occupation) && data.personal.occupation.length > 0 ? data.personal.occupation.join(', ') : 'Unknown'}
-                Affiliation: ${Array.isArray(data.personal?.affiliation) && data.personal.affiliation.length > 0 ? data.personal.affiliation.join(', ') : 'Unknown'}
-                Partner: ${Array.isArray(data.personal?.partner) && data.personal.partner.length > 0 ? data.personal.partner.join(', ') : 'Unknown'}
-                Clan: ${data.personal?.clan ?? 'Unknown'}
-                Titles: ${Array.isArray(data.personal?.titles) && data.personal.titles.length > 0 ? data.personal.titles.join(', ') : 'Unknown'}
-            Tools: ${Array.isArray(data.tools) && data.tools.length > 0 ? data.tools.join(', ') : 'Unknown'}
-            Unique Traits: ${Array.isArray(data.uniqueTraits) && data.uniqueTraits.length > 0 ? data.uniqueTraits.join(', ') : 'Unknown'}
-            Voice Actors:
-                Japanese: ${Array.isArray(data.voiceActors?.japanese) && data.voiceActors.japanese.length > 0 ? data.voiceActors.japanese.join(', ') : 'Unknown'}
-                English: ${Array.isArray(data.voiceActors?.english) && data.voiceActors.english.length > 0 ? data.voiceActors.english.join(', ') : 'Unknown'}
-        `;
-    }
-    
-    
-    function cleanChakraNature(nature) {
-        // Define the valid words and their capitalized versions
-        const validNatures = {
-            'earth': 'Earth',
-            'fire': 'Fire',
-            'water': 'Water',
-            'wind': 'Wind',
-            'lightning': 'Lightning'
-        };
-    
-        // Process the input array
-        const processedNatures = nature
-            .map(type =>
-                type
-                    .replace(/\s*release\s*/gi, '')   // Remove the word "release" (case-insensitive)
-                    .replace(/\s*\(.*?\)/g, '')       // Remove any text within parentheses (including the parentheses)
-                    .replace(/[\[\]{}]/g, '')         // Remove square and curly brackets
-                    .trim()                           // Trim any leading or trailing whitespace
-                    .toLowerCase()                    // Convert to lowercase for consistent comparison
-            )
-            .map(type => validNatures[type] || '')   // Map to the proper capitalization or empty if not valid
-            .filter(type => type);                   // Filter out empty strings
-    
-        // Check if the array is empty and set it to ['None'] if it is
-        return processedNatures.length > 0 ? processedNatures.join(', ') : ['None'].join(', ');
-    }
-    
-    function cleanClan(clan) {
-        // Function to clean individual clan strings
-        const cleanString = (str) => str
-            .replace(/\s*\(Anime only\)/gi, '') // Remove "(Anime only)" (case-insensitive)
-            .replace(/\s*\(Novel only\)/gi, '')  
-            .trim(); // Trim any leading or trailing whitespace
-    
-        if (Array.isArray(clan)) {
-            // If clan is an array, clean each item and filter out empty strings
-            const cleanedArray = clan.map(cleanString).filter(item => item !== '');
-            return cleanedArray.length > 0 ? cleanedArray.join(', ') : 'None';
-        } else if (typeof clan === 'string') {
-            // If clan is a string, clean it and return it, default to 'None' if empty
-            const cleanedClan = cleanString(clan);
-            return cleanedClan ? cleanedClan : 'None';
-        } else {
-            // If clan is neither a string nor an array (e.g., undefined or null), return 'None'
-            return 'None';
-        }
-    }
-    
-    
       // Updated handleGuess function for Firebase
   async function handleGuess() {
     if (gameWon || guesses >= 8) return;
@@ -406,7 +305,7 @@ let targetInfo = null;
         <div><img src="${character.imageUrl}" alt="${character.name}"></div>
         <div class="${getClass(character.name, targetCharacter.name)}">${character.name}</div>
         <div class="${getClass(character.rank, targetCharacter.rank)}">${character.rank}</div>
-        <div class="${getClass(character.village, targetCharacter.village)}">${character.village}</div>
+        <div class="${getClass(character.village, targetCharacter.village)}">${convertVillageName(character.village)}</div>
         <div class="${getClass(character.height, targetCharacter.height, 'height')}">${character.height} ${getArrowHeight(character.height, targetCharacter.height)}</div>
         <div class="${getClass(character.age, targetCharacter.age, 'age')}">${character.age} ${getArrow(character.age, targetCharacter.age)}</div>
         <div class="${getClanClass(character.clan, targetCharacter.clan)}">${character.clan}</div>
@@ -437,8 +336,38 @@ let targetInfo = null;
         statsDiv.style.display = 'block';
         displayStats();
     });
+
+    document.getElementById("mobileStats").addEventListener("click", () => {
+        document.getElementById("stats").style.display = "block";
+        displayStats();
+    });
+    document.getElementById("mobileHelp").addEventListener("click", () => {
+        helpDiv.style.display = 'block';
+    });
+    document.getElementById("mobileAbout").addEventListener("click", () => {
+        document.getElementById("about-popup").style.display = "block";
+    });
+    document.getElementById("mobileCharacters").addEventListener("click", () => {
+        charactersGrid.innerHTML = '';
+        characters.forEach(character => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <img src="${character.imageUrl || 'placeholder.jpg'}" alt="${character.name}">
+                <div>
+                    ${character.name}
+                    <span style="display:block;"><b class="debut-text">Debut Episode: </b>${character.debut}</span>
+                </div>
+            `;
+            charactersGrid.appendChild(div);
+        });
+        document.getElementById("charactersPopup").style.display = "flex";
+    });
+    
     
     closeStatsButton.addEventListener('click', () => {
+        statsDiv.style.display = 'none';
+    });
+    document.getElementById("closeStatsMobile").addEventListener("click", () => {
         statsDiv.style.display = 'none';
     });
 
@@ -471,7 +400,7 @@ let targetInfo = null;
     console.log("Shown");
     popupCharacterName.innerHTML = `<h2>${targetCharacter.name}</h2>`;
     labelRank.textContent = targetCharacter.rank;
-    labelVillage.textContent = targetCharacter.village;
+    labelVillage.textContent = convertVillageName(targetCharacter.village);
     labelHeight.textContent = targetCharacter.height;
     labelAge.textContent = targetCharacter.age;
     labelClan.textContent = targetCharacter.clan;
@@ -588,27 +517,6 @@ function getWinsToNextRank(nextRank) {
     return Math.max(0, nextRankThreshold - stats.wins);
 }
 
-    function fetchCharacterImage(characterName) {
-        console.log(`Fetching image for: ${characterName}`);
-        fetch(`https://narutodb.xyz/api/character/search?name=${encodeURIComponent(characterName)}`)
-            .then(response => response.json())
-            .then(data => {
-                const images = data.images;
-                const lastImage = images[images.length - 1]; // Get the last image
-                targetCharacter.imageUrl = lastImage; // Store image URL in targetCharacter
-                if (images.length > 1 && !["Naruto Uzumaki", "Moegi Kazamatsuri", "Udon Ise", "Sasuke Uchiha", "Sakura Haruno", "Shikamaru Nara", "Ino Yamanaka", "Chōji Akimichi", "Rock Lee", "Tenten", "Neji Hyūga", "Hinata Hyūga", "Kiba Inuzuka", "Shino Aburame", "Gaara", "Konohamaru Sarutobi"].includes(character.name)) {
-                    targetCharacter.imageUrl = images[0];
-                }
-                
-                if (targetCharacter.name == "Jiraiya")
-                    targetCharacter.imageUrl = "images/jiraiya.png";
-                if (guesses >= 8 || gameWon) {
-                    showPopup(); // Show popup when the game ends
-                }
-            })
-            .catch(error => console.error('Error fetching character image:', error));
-    }
-
     function getClass(value, targetValue, type) {
         // Convert both values to strings for comparison
         const strValue = String(value);
@@ -667,22 +575,57 @@ function getWinsToNextRank(nextRank) {
     
         return 'no'; // No match
     }
+
+    function convertVillageName(romanizedName) {
+        const villageMap = {
+            'Konohagakure': 'Hidden Leaf Village',
+            'Sunagakure': 'Hidden Sand Village',
+            'Kirigakure': 'Hidden Mist Village',
+            'Kumogakure': 'Hidden Cloud Village',
+            'Iwagakure': 'Hidden Stone Village',
+            'Amegakure': 'Hidden Rain Village',
+            'Otogakure': 'Hidden Sound Village',
+            'Takigakure': 'Hidden Waterfall Village',
+            'Kusagakure': 'Hidden Grass Village',
+            'Tetsu no Kuni': 'Land of Iron',
+            'Yu no Kuni': 'Land of Hot Water',
+            'Nami no Kuni': 'Land of Waves',
+            'Ta no Kuni': 'Land of Rice Fields',
+            'Hoshigakure': 'Hidden Star Village',
+            'Kuma no Kuni': 'Land of Bears',
+            'Tori no Kuni': 'Land of Birds'
+        };
+    
+        return villageMap[romanizedName] || romanizedName; // Return English name if found, otherwise return original
+    }
     
     function getChakraClass(abilities, targetAbilities) {
-        const abilitiesSet = new Set(abilities);
-        const targetAbilitiesSet = new Set(targetAbilities);
-
-        if (abilitiesSet.size === targetAbilitiesSet.size && [...abilitiesSet].every(ability => targetAbilitiesSet.has(ability))) {
-            return 'correct'; // Full match
+        // Convert string inputs to arrays, split by comma if needed
+        const processAbilities = input => {
+            if (Array.isArray(input)) return input.map(a => a.trim().toLowerCase());
+            if (typeof input === 'string') return input.split(/,|and/).map(a => a.trim().toLowerCase());
+            return [];
+        };
+    
+        const processedAbilities = processAbilities(abilities);
+        const processedTarget = processAbilities(targetAbilities);
+    
+        const abilitiesSet = new Set(processedAbilities);
+        const targetAbilitiesSet = new Set(processedTarget);
+    
+        console.log("Abilities:", processedAbilities);
+        console.log("Target:", processedTarget);
+    
+        if (abilitiesSet.size === targetAbilitiesSet.size && 
+            [...abilitiesSet].every(ability => targetAbilitiesSet.has(ability))) {
+            return 'correct';
         }
-
-        for (let ability of targetAbilitiesSet) {
-            if (abilitiesSet.has(ability)) {
-                return 'similar'; // Partial match
-            }
-        }
-
-        return 'no'; // No match
+    
+        // Check for any intersection between the two sets
+        const intersection = [...abilitiesSet].filter(ability => targetAbilitiesSet.has(ability));
+        if (intersection.length > 0) return 'similar';
+    
+        return 'no';
     }
 
     function compareHeights(height1, height2) {
@@ -733,37 +676,6 @@ function getWinsToNextRank(nextRank) {
     }
     
 
-    function loadCharacterImages() {
-        // Array to hold promises for fetching images
-        const imagePromises = characters.map(character => {
-            return fetch(`https://narutodb.xyz/api/character/search?name=${encodeURIComponent(character.name)}`)
-                .then(response => response.json())
-                .then(data => {
-                    const images = data.images;
-                    if (images && images.length > 0) {
-                        character.imageUrl = images[images.length - 1];
-                        if (images.length > 1 && !["Naruto Uzumaki", "Moegi Kazamatsuri", "Udon Ise", "Sasuke Uchiha", "Sakura Haruno", "Shikamaru Nara", "Ino Yamanaka", "Chōji Akimichi", "Rock Lee", "Tenten", "Neji Hyūga", "Hinata Hyūga", "Kiba Inuzuka", "Shino Aburame", "Gaara", "Temari", "Kankurō", "Konohamaru Sarutobi"].includes(character.name)) {
-                            character.imageUrl = images[0];
-                        }
-                        if (character.name == "Jiraiya") {
-                            character.imageUrl = "images/jiraiya.png";
-                        }
-                    }
-                    character.debut = data.debut?.anime;
-                })
-                .catch(error => console.error(`Error fetching image for ${character.name}:`, error));
-        });
-    
-        // Wait for all promises to complete
-        Promise.all(imagePromises)
-            .then(() => {
-                // Update autocomplete list after all images are loaded
-                searchBar.disabled = false;
-                showAllNames();
-            });
-    }
-    
-
     charactersButton.addEventListener('click', () => {
         charactersGrid.innerHTML = '';
         characters.forEach(character => {
@@ -782,6 +694,9 @@ function getWinsToNextRank(nextRank) {
 
     // Close Characters Popup
     closeCharactersButton.addEventListener('click', () => {
+        charactersPopup.style.display = 'none';
+    });
+    document.getElementById("closeCharactersMobile").addEventListener("click", () => {
         charactersPopup.style.display = 'none';
     });
 
@@ -878,6 +793,10 @@ function getWinsToNextRank(nextRank) {
         helpDiv.style.display = 'none';
     });
 
+    document.getElementById("closeHelpMobile").addEventListener("click", () => {
+        helpDiv.style.display = 'none';
+    });
+
     aboutButton.addEventListener('click', () => {
         aboutDiv.style.display = 'block';
     });
@@ -885,4 +804,8 @@ function getWinsToNextRank(nextRank) {
     closeAboutButton.addEventListener('click', () => {
         aboutDiv.style.display = 'none';
     });
+    document.getElementById("closeAboutMobile").addEventListener("click", () => {
+        aboutDiv.style.display = 'none';
+    });
+    
 });

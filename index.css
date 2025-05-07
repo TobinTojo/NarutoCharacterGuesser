@@ -1,12 +1,75 @@
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 body {
-    font-family: Arial, sans-serif;
+    animation: fadeIn 1s ease-in-out;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1e1e1e, #2c3e50);
+    background-size: cover;
+    background-attachment: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
-    background-color: #1e1e1e; /* Dark grey background */
-    color: #dcddde; /* Light gray text */
+    color: #dcddde;
 }
+
+.popup-content {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+#results li, #stats-result li {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+
+h1, h2, h3 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+}
+
+/* Progress Bar Container */
+#progressBarContainer {
+    margin-top: 20px;
+}
+
+#rankPlaceHolder {
+    margin-bottom: 7px !important;
+}
+
+#currentRank {
+    font-weight: bold !important;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #ffffff, #ffffff);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    height: 30px;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.progress {
+    background: linear-gradient(90deg, #4caf50, #8bc34a);
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease-in-out;
+    animation: progressAnimation 1s ease-in-out infinite alternate;
+}
+
+@keyframes progressAnimation {
+    from { background-position: 0% 50%; }
+    to { background-position: 100% 50%; }
+}
+#progressText {
+    margin-top: 5px;
+    font-size: 16px;
+}
+
 
 .list-bullet {
     list-style: bullet;
@@ -17,9 +80,92 @@ body {
     text-align: left;
 }
 
-#hero-img {
-    height: 300px; 
-    margin: 20px;
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.hero-content {
+    flex: 1 1 400px;
+    color: white;
+    text-align: left;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.hero-content h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: #f5a623;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.hero-overlay {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.4); /* darken the image for better text contrast */
+    z-index: 1;
+}
+
+.hero-overlay-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.hero-overlay-content h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #f5a623;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.hero-subtext {
+    font-size: 1.3rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+    color: #eeeeee;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.hero-image-wrapper {
+    flex: 1 1 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-image {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    object-fit: cover;
 }
 
 .dotted-box img {
@@ -40,6 +186,19 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     width: 300px;
+}
+
+#searchContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #ffffff12;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: fit-content;
 }
 
 #searchContainer {
@@ -70,6 +229,7 @@ h1 {
     margin-top: 5px;
 }
 
+
 #popup-stats-section {
     display: flex;
     flex-direction: column; /* Stacks child elements vertically */
@@ -86,9 +246,6 @@ h1 {
     margin: 0; /* Optional: Removes default margin for cleaner alignment */
 }
 
-#guessButton:hover {
-    background-color: #4752c4; /* Slightly darker blue on hover */
-}
 .debut-text {
     font-weight: bold;
     color: white;
@@ -96,7 +253,7 @@ h1 {
 #autocomplete {
     list-style-type: none;
     padding: 0;
-    margin: 0;
+    margin-bottom: 30px;
     width: 300px;
     border: 1px solid #4f545c; /* Darker border */
     max-height: 150px;
@@ -124,22 +281,40 @@ h1 {
     background-color: #36393f; /* Slightly lighter on hover */
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
 
+::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #5865f2;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4752c4;
+}
 #results, #stats-result {
     list-style-type: none;
     padding: 0;
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     margin-top: 20px;
 }
 
-#results li, #results li-correct, #stats-result li{
+#results li, #results li-correct, #stats-result li {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
+    padding: 15px; /* Match the padding of #label-box */
     border-bottom: 1px solid #4f545c; /* Darker border */
-    border-radius: 5px;
+    border-radius: 10px; /* Match the border-radius of #label-box */
     margin-bottom: 10px;
+    background-color: #40444b; /* Dark background */
+    width: 100%; /* Ensure it takes the full width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 #results li-correct {
@@ -151,12 +326,44 @@ h1 {
 }
 
 
-#results li div, #results li-correct div , #stats-result li div {
-    width: 100px;
+#results li div, #results li-correct div, #stats-result li div {
+    width: 100px; /* Ensure each div has the same width */
     text-align: center;
     overflow-wrap: anywhere;
+    display: flex;
+    flex-direction: column; /* Stack icon and text vertically */
+    align-items: center; /* Center content horizontally */
+    justify-content: center; /* Center content vertically */
+    padding: 10px; /* Match the padding of .label */
+    border-radius: 5px; /* Match the border radius of .label */
+    color: #ffffff; /* Match the text color of .label */
+    margin: 5px; /* Match the margin of .label */
 }
 
+#results li div img {
+    width: 50px; /* Set a fixed width for the character image */
+    height: 50px; /* Set a fixed height for the character image */
+    border-radius: 5px; /* Rounded corners for the image */
+    object-fit: cover; /* Ensure the image covers the area without distortion */
+}
+
+#guessesLeft {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #fff;
+    margin-top: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 8px 16px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+
+#guessesCount {
+    font-weight: bold;
+    color: #faa61a; /* Discord yellow for emphasis */
+}
 .correct {
     background-color: #3ba55c; /* Discord green */
     color: #ffffff; /* White text */
@@ -173,20 +380,7 @@ h1 {
     color: #dcddde; /* Light text color */
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 1em;
-    margin-top: 20px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #5865f2; /* Discord blue */
-    color: #ffffff; /* White text color */
-}
 
-button:hover {
-    background-color: #4752c4; /* Slightly darker blue on hover */
-}
 
 /* CSS for Stats Modal */
 #stats {
@@ -263,29 +457,39 @@ button:hover {
 }
 
 #statsButton, #helpButton, #aboutButton, #characterButton {
-    display: inline-block;  /* Ensure buttons are inline-block */
-    padding: 10px 20px;     /* Padding for buttons */
-    font-size: 16px;        /* Font size for buttons */
-    cursor: pointer;        /* Cursor style for buttons */
-    border: none;           /* Remove default border */
-    border-radius: 5px;    /* Rounded corners for buttons */
-    background-color: #5865f2; /* Discord blue */
-    color: #ffffff;         /* White text color */
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+    padding: 8px 16px;
+    margin: 0;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    text-transform: uppercase;
 }
 
 #statsButton:hover, #helpButton:hover, #aboutButton:hover, #characterButton:hover {
-    background-color: #4752c4; /* Slightly darker blue on hover */
+    color: #f5a623; /* Modern accent (orange/gold) */
+    border-bottom: 2px solid #f5a623;
 }
 
-
-#closeStats, #statsButton, #helpButton, #aboutButton, #characterButton {
+#closeStats {
     margin-top: 20px;
-    background-color: #5865f2; /* Discord blue */
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
 }
 
-#closeStats:hover, #statsButton:hover, #helpButton:hover, #aboutButton:hover, #characterButton:hover {
-    background-color: #4752c4; /* Slightly darker blue on hover */
+#closeStats:hover {
+    background-color: #4752c4;
 }
+
 
 /* Additional styling for the new section */
 #guessSection {
@@ -339,13 +543,86 @@ button:hover {
 .popup {
     display: none; /* Hidden by default */
     position: fixed;
-    z-index: 1; /* Sit on top */
+    z-index: 10; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto; /* Enable scroll if needed */
     background-color:  rgba(0, 0, 0, 0.7);
+}
+
+
+
+#stats .popup-content {
+    background-color: #40444b;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 10% auto;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stats-item {
+    background-color: #36393f;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.stats-label {
+    font-size: 14px;
+    color: #dcddde;
+    display: block;
+}
+
+.stats-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* In your index.css file */
+#guessDistributionChart {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.chart-bar-container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2%;
+    align-items: flex-end;
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+.chart-bar {
+    width: 100%;
+    background-color: #5865f2;
+    border-radius: 5px 5px 0 0;
+    transition: height 0.5s ease;
+}
+
+.chart-labels {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2%;
+    width: 100%;
+}
+
+.chart-labels span {
+    text-align: center;
+    color: #dcddde;
+    font-size: 14px;
 }
 
 /* Popup content */
@@ -393,20 +670,6 @@ button:hover {
     height: auto; /* Maintain aspect ratio */
 }
 
-/* Button styles */
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin-top: 10px;
-    color: #ffffff; /* Text color */
-    background-color: #5865f2; /* Discord blue */
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #4752c4; /* Slightly darker blue on hover */
-}
 
 #playAgain {
     margin-bottom: 30px;
@@ -419,38 +682,15 @@ button:hover {
     font-weight: bold; /* Make text bold */
 }
 
-/* Additional CSS for alignment */
-#searchContainer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-#searchBar {
-    width: 300px;
-    padding: 10px;
-    border: 2px solid #4f545c; /* Darker border */
-    border-radius: 5px;
-    background-color: #40444b; /* Dark input background */
-    color: #dcddde; /* Light text color */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 #guessButton {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #5865f2; /* Discord blue */
-    color: #ffffff; /* White text color */
-    /* Align button slightly lower */
-    margin-top: 5px;
+    animation: pulse 2s infinite;
 }
-
-#guessButton:hover {
-    background-color: #4752c4; /* Slightly darker blue on hover */
-}
-
 
 /* Help modal styles */
 #help, #about-popup {
@@ -516,19 +756,60 @@ button:hover {
     background-color: #333333;
 }
 
-#label-box-stats {
-    margin-bottom: 0px !important;
-}
-#label-box-results {
-    background-color: #333333 !important;
-}
-#label-box {
-    background-color: #44619b !important;
+#label-box, #label-box-stats, #label-box-results {
+    background-color: #44619b; /* Dark blue background */
+    border-radius: 10px; /* Rounded corners */
+    padding: 15px; /* Add padding for spacing */
+    margin-bottom: 10px; /* Space between label boxes */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition */
 }
 
-#label-box-stats {
-    background-color: #4682b4  !important;
+#label-box:hover, #label-box-stats:hover, #label-box-results:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
+
+.label, .label-stats, .label-results {
+    font-weight: 600; /* Bold text */
+    color: #ffffff; /* White text */
+    padding: 10px; /* Padding for each label */
+    border-radius: 5px; /* Rounded corners for labels */
+    margin: 5px; /* Space between labels */
+    background-color: #5865f2; /* Discord blue background */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack icon and text vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    text-align: center; /* Center text */
+    min-width: 80px; /* Ensure labels have a minimum width */
+}
+
+.label i, .label-stats i, .label-results i {
+    margin-bottom: 5px; /* Space between icon and text */
+    font-size: 1.2em; /* Slightly larger icons */
+}
+
+.label:hover, .label-stats:hover, .label-results:hover {
+    background-color: #4752c4; /* Darker blue on hover */
+}
+
+#label-box, #label-box-stats {
+    background: linear-gradient(135deg, #4752c4, #4752c4); /* Gradient background */
+    border: 1px solid #4f545c; /* Darker border */
+}
+
+.label {
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+.label:hover {
+    background-color: #3ba55c; /* Green background on hover */
+    color: #ffffff; /* White text on hover */
+}
+
+
 
 #rankSection {
     margin: 20px 0;
@@ -562,24 +843,36 @@ button:hover {
 
 
 .navbar {
-    position: absolute;
-    top: 10px;
-    right: 20px;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 20px 0;
+    background: none;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    font-family: 'Poppins', sans-serif;
 }
 
 .navbar button {
-    margin-left: 10px;
-    padding: 10px;
+    background: transparent;
     border: none;
-    border-radius: 5px;
-    background-color: #5865f2; /* Discord blue */
-    color: white;
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding: 8px 16px;
     cursor: pointer;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    border-bottom: 2px solid transparent;
 }
+
 .navbar button:hover {
-    background-color: #0056b3;
+    color: #f5a623; /* Accent color */
+    border-bottom: 2px solid #f5a623;
 }
+
 
 li {
     list-style:none;
@@ -662,20 +955,337 @@ header {
     word-wrap: break-word; /* Break long words if needed */
 }
 
+#popup .popup-content {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    border: 2px solid #f5a623;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(245, 166, 35, 0.3);
+    color: #fff;
+    padding: 30px;
+    max-width: 700px;
+}
+
+.popup-header h2 {
+    color: #f5a623;
+    text-shadow: 0 0 10px rgba(245, 166, 35, 0.5);
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+#popupImageContainer {
+    border: 3px solid #f5a623;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px auto;
+    max-width: 700px;
+    background: #000;
+    box-shadow: 0 0 15px rgba(245, 166, 35, 0.4);
+}
+
+#popupImageContainer img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 
 
-/* Ensure popup height adjusts based on viewport */
-@media screen and (max-width: 1024px) {
+.label-stats {
+    background: rgba(245, 166, 35, 0.1);
+    border: 1px solid #f5a623;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1.1em;
+    color: #f5a623;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
-#typing-container {
-    font-size: 16px;
+.label-results {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(245, 166, 35, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 1.2em;
+    margin: 5px 0;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#popupMessage {
+    font-size: 1.4em;
+    margin: 25px 0;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border-left: 4px solid #f5a623;
+}
+
+#progressBarContainer {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 25px 0;
+}
+
+.progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #f5a623;
+    height: 25px;
+}
+
+.progress {
+    background: linear-gradient(90deg, #28a745 0%, #a8e063 100%);
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+}
+
+
+#playAgainPopup {
+    background: #579d28;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 15px 40px;
+    border-radius: 25px;
+    border: none;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 20px auto 0;
+}
+
+#playAgainPopup:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(17, 176, 70, 0.8);
+}
+
+#closePopup {
+    color: #f5a623;
+    font-size: 35px;
+    text-shadow: 0 0 10px rgba(245, 166, 35, 0.5);
+    top: 15px;
+    right: 20px;
+}
+
+.character-fact {
+    font-style: italic;
+    color: #ffd700;
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    border-top: 1px solid rgba(245, 166, 35, 0.3);
+    border-bottom: 1px solid rgba(245, 166, 35, 0.3);
+}
+
+.mobile-nav {
+    display: none;
+}
+
+.close-icon {
+    display: none;
+    font-size: 28px;
+    color: #aaa;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 1001;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.close-icon:hover {
+    transform: scale(1.2) rotate(90deg);
+    color: #f5a623;
 }
 
 
 
-    #hero-img {
-        height: 250px; 
-        margin: 10px;
+/* Ensure popup height adjusts based on viewport */
+@media screen and (max-width: 600px) {
+    .close-icon {
+        display: block;
+    }
+
+    .close-button {
+        display: none !important;
+    }
+
+    .navbar {
+        justify-content: center; /* Center buttons on small screens */
+        padding: 10px;
+    }
+
+    .navbar button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    /* Ensure the stats-result container is scrollable horizontally */
+#stats-result {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping of list items */
+    width: 100%; /* Ensure it takes the full width */
+    max-width: 100%; /* Prevent it from exceeding the popup width */
+    margin: 0 auto; /* Center the container */
+}
+
+/* Ensure the label-box and list items don't wrap and can scroll horizontally */
+#label-box-stats, #label-box-results, #stats-result li {
+    display: flex; /* Use flexbox for alignment */
+    flex-wrap: nowrap; /* Prevent wrapping of flex items */
+    width: 100%; /* Ensure it takes the full width */
+    min-width: 600px; /* Set a minimum width to ensure content is scrollable */
+}
+
+.hero-bg {
+    animation: zoomIn 20s ease-in-out infinite alternate;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+
+/* Adjust the layout for smaller screens */
+@media screen and (max-width: 600px) {
+    .navbar {
+        display: none;
+    }
+
+    .mobile-nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1e1e1e;
+        padding: 10px 0;
+        z-index: 1000;
+        border-top: 1px solid #333;
+    }
+
+    .mobile-nav button {
+        background: none;
+        border: none;
+        color: #ffffff;
+        font-size: 20px;
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+    .mobile-nav button:hover {
+        transform: scale(1.2);
+        color: #f5a623;
+        text-shadow: 0 0 8px #f5a623;
+    }
+
+    #stats-result {
+        max-width: 100%; /* Allow the container to take the full width of the screen */
+    }
+
+    #label-box-stats, #label-box-results, #stats-result li {
+        min-width: 100%; /* Ensure the content fits within the popup */
+        font-size: 12px; /* Reduce font size for better fit */
+        padding: 6px; /* Reduce padding for smaller screens */
+    }
+
+    .label-stats, .label-results {
+        min-width: 80px; /* Ensure labels have a minimum width */
+        font-size: 10px; /* Reduce font size for better fit */
+    }
+
+    /* Adjust the popup content width for smaller screens */
+    .popup-content {
+        width: 90%; /* Increase width to fit content */
+        max-width: none; /* Remove max-width constraint */
+        margin: 10% auto; /* Center the popup */
+    }
+}
+    #typing-container {
+        font-size: 16px;
+    }
+
+    /* Ensure the results container is scrollable horizontally on small screens */
+    #results {
+        overflow-y: auto; /* Enable horizontal scrolling */
+        white-space: nowrap; /* Prevent wrapping of list items */
+        width: 100%; /* Ensure it takes the full width */
+        max-width: 1200px; /* Set a max-width to prevent it from becoming too wide */
+        margin: 0 auto; /* Center the container */
+    }
+
+    /* Ensure the label-box and list items don't wrap and can scroll horizontally */
+    #label-box, #results li, #stats-result li {
+        display: flex; /* Use flexbox for alignment */
+        flex-wrap: nowrap; /* Prevent wrapping of flex items */
+        width: 100%; /* Ensure it takes the full width */
+        min-width: 600px; /* Set a minimum width to ensure content is scrollable */
+    }
+
+    #results li div {
+        word-wrap: break-word; /* Allow long words to break and wrap to the next line */
+        white-space: normal; /* Allow text to wrap */
+        text-align: center; /* Center the text within the container */
+        padding: 10px; /* Add padding for spacing */
+        box-sizing: border-box; /* Include padding in the width calculation */
+    }
+
+    #stats-result li div {
+        word-wrap: break-word; /* Allow long words to break and wrap to the next line */
+        white-space: normal; /* Allow text to wrap */
+    }
+
+    #results {
+        max-width: 100%; /* Allow the container to take the full width of the screen */
+    }
+
+    #label-box, #results li, #stats-result li {
+        min-width: 600px; /* Set a minimum width to ensure content is scrollable */
+    }
+
+    /* Ensure the label and list items are aligned properly */
+    .label, .label-stats, .label-results {
+    flex: 1; /* Allow each label to take equal space */
+    min-width: 100px; /* Set a minimum width for each label */
+    text-align: center; /* Center the text within each label */
+    padding: 10px; /* Add padding for spacing */
+    box-sizing: border-box; /* Include padding in the width calculation */
+    }
+
+    #results li {
+        width: 1200px;
+        font-size: 12px !important;
+        padding: 6px !important;
+    }
+
+
+    .hero {
+        flex-direction: column-reverse;
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-overlay-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-subtext {
+        font-size: 1rem;
+    }
+
+
+    .hero-image {
+        max-width: 100%;
+        height: auto;
     }
 
     #charactersPopup {
@@ -695,31 +1305,11 @@ header {
         height: 80px;
     }
 
-    #results, #stats-result {
-        list-style-type: none;
-        padding: 0;
-        width: 100%;
-        max-width: 800px;
-        margin-top: 20px;
-        font-size: 10px;
-    }
 
     #stats-result li {
         display: flex;
         justify-content: center;
         width: 90%;
-        padding: 10px;
-        border-bottom: 1px solid #4f545c;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #results li,#results li-correct {
-        display: flex;
-        justify-content: center;
-        width: 320px;
         padding: 10px;
         border-bottom: 1px solid #4f545c;
         border-radius: 5px;
@@ -745,7 +1335,7 @@ header {
     #autocomplete {
         list-style-type: none;
         padding: 0px;
-        margin: 0px;
+        margin-bottom: 30px;
         width: 250px;
         border: 1px solid rgb(79, 84, 92);
         max-height: 150px;
@@ -830,4 +1420,221 @@ header {
     }
     
     
+}
+
+
+.popup-content {
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.close-button {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.close-button:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.popup h2, .popup h3, .popup p {
+    font-family: 'Poppins', sans-serif;
+    margin: 10px 0;
+}
+
+@keyframes popupFadeIn {
+    from { opacity: 0; transform: translate(-50%, -55%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    margin-top: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: #fff;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s;
+}
+
+button:hover {
+    background-color: #4752c4;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* General Popup Styles */
+.popup-content {
+    background: rgba(36, 39, 46, 0.85);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(245, 166, 35, 0.4);
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.popup-header {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #f5a623;
+    text-shadow: 0 0 10px rgba(245, 166, 35, 0.5);
+}
+
+.popup h2, .popup h3, .popup p {
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 15px;
+}
+
+/* Stats Popup Specific */
+.stats-content {
+    background-color: rgba(45, 49, 58, 0.95);
+    color: #ffffff;
+    border: 1px solid rgba(245, 166, 35, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stats-item {
+    background-color: #36393f;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.stats-item:hover {
+    transform: scale(1.05);
+}
+
+.stats-label {
+    font-size: 1em;
+    color: #f5a623;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.stats-value {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* Bar Graph Enhancements */
+.bar {
+    background-color: #f5a623;
+    height: 30px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.bar-label {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.bar-value {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .popup-content {
+        margin-top: 15%;
+    }
+
+    .popup-header {
+        font-size: 1.5em;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bar-label, .bar-value {
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #stats .popup-content {
+        max-height: 80vh; /* Limit popup height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        margin: 20px auto; /* Reduce vertical margin */
+        padding-bottom: 80px; /* Space for mobile navbar */
+    }
+
+    .stats-content {
+        position: relative;
+        top: auto;
+        transform: none;
+        margin: 20px auto;
+    }
+
+    #closeStats {
+        position: sticky;
+        bottom: 20px;
+        margin-top: 30px;
+    }
+
+    #guessDistributionChart {
+        margin-top: 10px;
+    }
+
+    .chart-bar-container {
+        height: 100px; /* Reduce height for mobile */
+    }
+
+    .stats-item {
+        padding: 10px;
+    }
+
+    .stats-label {
+        font-size: 0.9em;
+    }
+
+    .stats-value {
+        font-size: 1.2em;
+    }
+
+    #rankSection {
+        margin: 10px 0;
+    }
+
+    #rankHeader {
+        font-size: 1.1em;
+    }
 }
